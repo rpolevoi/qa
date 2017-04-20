@@ -8,6 +8,8 @@ import { routes } from './routes';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { DisplayComponent } from './display/display.component';
+import { QAService } from './qa.service';
+
 
 @NgModule({
   declarations: [
@@ -21,7 +23,7 @@ import { DisplayComponent } from './display/display.component';
     HttpModule,
     RouterModule.forRoot(routes, { useHash: false }),
   ],
-  providers: [],
+  providers: [QAService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
