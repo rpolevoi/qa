@@ -16,8 +16,6 @@ export class HomeComponent implements OnInit {
   
   toDisplay() {
     this.qaServ.newQA();
-    //this.router.navigate(['display']);
-    
   }
 
 }
