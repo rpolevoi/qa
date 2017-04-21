@@ -3,7 +3,7 @@
 <div>
 {{ qa.q }}<br>
 <button *ngIf="!showAnswer" (click)="showAnswer = true">SHOW ANSWER</button>
-<button (click)="newQA()">New Question?</button>
+<button *ngIf="!showAnswer" (click)="newQA()">Different Question?</button>
 </div>
 
 
