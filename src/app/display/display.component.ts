@@ -12,19 +12,19 @@ import { QAService } from '../qa.service';
 export class DisplayComponent implements OnInit {
   
   qa:QA;
-  flag = true;
+  showAnswer = false;
 
   constructor(private route: ActivatedRoute, private qaServ: QAService) { 
     route.data.pluck('qa')
         .subscribe(obj => { this.qa = <QA>obj;
-          this.flag = !this.flag;
-          console.log(this.flag);} );
+          this.showAnswer = false;
+          console.log(this.showAnswer);} );
   }
 
   ngOnInit() { console.log("init!");
   }
   
-  toDisplay() {
+  newQA() {
     this.qaServ.newQA();
   }
 

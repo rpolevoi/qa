@@ -1,5 +1,14 @@
 
-<button (click)="toDisplay()">QA</button>
-<br>
-{{ qa.q }}
-{{ qa.a }}
+
+<div>
+{{ qa.q }}<br>
+<button *ngIf="!showAnswer" (click)="showAnswer = true">SHOW ANSWER</button>
+<button (click)="newQA()">New Question?</button>
+</div>
+
+
+<div *ngIf="showAnswer">
+{{ qa.a }}<br>
+<button (click)="newQA()">New QA?</button>
+</div>
+    
