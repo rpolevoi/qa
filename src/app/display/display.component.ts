@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router} from '@angular/router';
+import 'rxjs/add/operator/pluck';
+import { QA } from '../qa';
 
 @Component({
   selector: 'display',
@@ -6,8 +9,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./display.component.css']
 })
 export class DisplayComponent implements OnInit {
+  
+  qa:QA;
 
-  constructor() { }
+  constructor(private route: ActivatedRoute) { 
+    route.data.pluck('qa')
+        .subscribe(obj => this.qa = <QA>obj );
+  }
 
   ngOnInit() {
   }

@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { DisplayComponent } from './display/display.component';
+import { QAService } from './qa.service';
 
 export const routes: Routes = [
   {
@@ -8,8 +9,11 @@ export const routes: Routes = [
     component: HomeComponent,
   },
   {
-    path: 'display',
+    path: 'display/:id',
     component: DisplayComponent,
+        resolve: {
+      qa: QAService
+    }
   },
   {
     path: '**',
