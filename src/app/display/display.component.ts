@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router} from '@angular/router';
 import 'rxjs/add/operator/pluck';
-import { QA } from '../qa';
+import { QA, ViewedQA } from '../qa';
 import { QAService } from '../qa.service';
 
 @Component({
@@ -12,13 +12,13 @@ import { QAService } from '../qa.service';
 export class DisplayComponent implements OnInit {
   
   qa:QA;
-  showAnswer = false;
+  showAFlag = false;
   session:number[] = [];
 
   constructor(private route: ActivatedRoute, private qaServ: QAService) { 
     route.data.pluck('qa')
         .subscribe(obj => { this.qa = <QA>obj;
-          this.showAnswer = false;
+          this.showAFlag = false;
           this.session.push(obj['q']);
           console.log(this.session);
         } );
@@ -29,6 +29,15 @@ export class DisplayComponent implements OnInit {
   
   newQA() {
     this.qaServ.newQA();
+  }
+  
+  showAnswer(){
+    this.showAFlag = true;
+    let tag = this.qa.tag;
+    let index = this.qaServ.current;
+    let bookmark = false;
+    const temp:ViewedQA = { tag, index, bookmark };
+    this.qaServ.postViewedObject(temp);
   }
 
 }

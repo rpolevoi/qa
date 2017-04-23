@@ -20,7 +20,6 @@ export class QAService implements Resolve<QA>{
         
         this.getQALength(); 
         this.getViewedList();
-        this.postViewedObject();
         this.viewedQAList$ = af.database.list('/users/rob/viewedObj');
     }
   
@@ -70,12 +69,8 @@ export class QAService implements Resolve<QA>{
     
     }
     
-    private postViewedObject(){
+    postViewedObject(obj:ViewedQA){
     const items = this.af.database.list('/users/rob/viewedObj');
-        items.push({  
-                tag: "testTag",
-                index: 23,
-                 bookmark: true
-        });
+        items.push(obj);
     }
 }
