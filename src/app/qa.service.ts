@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/first';
 import { QA, ViewedQA } from './qa';
 
 @Injectable()
@@ -12,15 +13,32 @@ export class QAService implements Resolve<QA>{
 
     length:number;
     current:number;
-    viewed:number[];
+    viewed:number[] = [];
     viewedQAList$: FirebaseListObservable<any>;
 
 //af is supposed to be public, but public keyword not strictly needed -- check on this
     constructor(private http: Http, private router: Router, public af: AngularFire) {
         
         this.getQALength(); 
-        this.getViewedList();
+        //this.getViewedList();
         this.viewedQAList$ = af.database.list('/users/rob/viewedObj');
+        this.viewedQAList$
+                .first()
+                .subscribe(
+                    
+                    list => {
+                        
+                        if(!list) {this.viewed = []; }
+                        
+                        else {
+                            for (let i=0; i<list.length; i++ ) {
+                                this.viewed.push(list[i]['index']);
+                                console.log(list[i]['index']);
+                                }
+                        }
+                        console.log(this.viewed);
+                    }
+                );
     }
   
     resolve(route: ActivatedRouteSnapshot):Observable<QA> {
@@ -61,16 +79,10 @@ export class QAService implements Resolve<QA>{
         this.current = Math.floor(Math.random() * this.length);
     }
     
-    private getViewedList() {
- 
-            this.http.get('https://qaproject-c3e87.firebaseio.com/users/rob/viewed.json')
-               .map(response => response.json())
-               .subscribe(list => { this.viewed = list || []; console.log(this.viewed);})
-    
-    }
-    
+
+
     postViewedObject(obj:ViewedQA){
-    const items = this.af.database.list('/users/rob/viewedObj');
+     const items = this.af.database.list('/users/rob/viewedObj');
         items.push(obj);
     }
 }
