@@ -2,22 +2,26 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
 import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+import { AngularFire, FirebaseListObservable } from 'angularfire2';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
-import { QA } from './qa';
+import { QA, ViewedQA } from './qa';
 
 @Injectable()
 export class QAService implements Resolve<QA>{
 
     length:number;
     current:number;
-    viewed = [];
+    viewed:number[];
+    viewedQAList$: FirebaseListObservable<any>;
 
-
-    constructor(private http: Http, private router: Router) {
+//af is supposed to be public, but public keyword not strictly needed -- check on this
+    constructor(private http: Http, private router: Router, public af: AngularFire) {
         
         this.getQALength(); 
         this.getViewedList();
+        this.postViewedObject();
+        this.viewedQAList$ = af.database.list('/users/rob/viewedObj');
     }
   
     resolve(route: ActivatedRouteSnapshot):Observable<QA> {
@@ -65,6 +69,13 @@ export class QAService implements Resolve<QA>{
                .subscribe(list => { this.viewed = list || []; console.log(this.viewed);})
     
     }
-  
-
+    
+    private postViewedObject(){
+    const items = this.af.database.list('/users/rob/viewedObj');
+        items.push({  
+                tag: "testTag",
+                index: 23,
+                 bookmark: true
+        });
+    }
 }

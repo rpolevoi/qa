@@ -1,0 +1,9 @@
+<p>
+  history works!
+</p>
+
+  <ul>
+    <li *ngFor="let viewed of viewedList$ | async">
+       {{ viewed | json }}
+    </li>
+  </ul>

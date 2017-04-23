@@ -13,12 +13,15 @@ export class DisplayComponent implements OnInit {
   
   qa:QA;
   showAnswer = false;
+  session:number[] = [];
 
   constructor(private route: ActivatedRoute, private qaServ: QAService) { 
     route.data.pluck('qa')
         .subscribe(obj => { this.qa = <QA>obj;
           this.showAnswer = false;
-          console.log(this.showAnswer);} );
+          this.session.push(obj['q']);
+          console.log(this.session);
+        } );
   }
 
   ngOnInit() { console.log("init!");
