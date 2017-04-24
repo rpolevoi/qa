@@ -16,12 +16,14 @@ export class QAService implements Resolve<QA>{
     viewed:number[] = [];
     viewedQAList$: FirebaseListObservable<any>;
 
-//af is supposed to be public, but public keyword not strictly needed -- check on this
     constructor(private http: Http, private router: Router, public af: AngularFire) {
         
-        this.getQALength(); 
-        //this.getViewedList();
-        this.viewedQAList$ = af.database.list('/users/rob/viewedObj');
+        this.getQALength();
+        
+        //connect to viewed history -- will subscribe in history component template
+        this.viewedQAList$ = af.database.list('/users/rob/viewed');
+        
+        // push  view history into viewed[] array at start
         this.viewedQAList$
                 .first()
                 .subscribe(
@@ -42,6 +44,7 @@ export class QAService implements Resolve<QA>{
     }
   
     resolve(route: ActivatedRouteSnapshot):Observable<QA> {
+        this.current = +route.params['id'];
         return this.http.get('https://qaproject-c3e87.firebaseio.com/qa/' + this.current + '.json')
                .map(response => response.json());
         
@@ -82,7 +85,7 @@ export class QAService implements Resolve<QA>{
 
 
     postViewedObject(obj:ViewedQA){
-     const items = this.af.database.list('/users/rob/viewedObj');
+     const items = this.af.database.list('/users/rob/viewed');
         items.push(obj);
     }
 }

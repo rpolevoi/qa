@@ -14,10 +14,12 @@ export class DisplayComponent implements OnInit {
   qa:QA;
   showAFlag = false;
   session:number[] = [];
+  bookmark = false;
 
   constructor(private route: ActivatedRoute, private qaServ: QAService) { 
     route.data.pluck('qa')
         .subscribe(obj => { this.qa = <QA>obj;
+          console.log("here", obj);
           this.showAFlag = false;
           this.session.push(obj['q']);
           console.log(this.session);
@@ -35,9 +37,14 @@ export class DisplayComponent implements OnInit {
     this.showAFlag = true;
     let tag = this.qa.tag;
     let index = this.qaServ.current;
-    let bookmark = false;
+    let bookmark = this.bookmark;
     const temp:ViewedQA = { tag, index, bookmark };
     this.qaServ.postViewedObject(temp);
+  }
+  
+  toggleBookmark() {
+     this.bookmark = !this.bookmark;
+    
   }
 
 }

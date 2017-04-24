@@ -1,9 +1,21 @@
-<p>
-  history works!
-</p>
+<h2>history</h2>
 
+<button (click)="bookmarkFilter = !bookmarkFilter">{{!bookmarkFilter ? 'Bookmarked Only' : 'Show All'}}</button>
+
+<div *ngIf="!bookmarkFilter else elseBlock">
   <ul>
-    <li *ngFor="let viewed of viewedList$ | async">
-       {{ viewed | json }}
+    <li *ngFor="let item of fullHistory">
+     <a md-line routerLink="/display/{{item.index}}">
+     <span md-line>{{ item | json }}</span>    
+     </a>
     </li>
   </ul>
+</div>
+
+<ng-template #elseBlock >
+  <ul>
+    <li *ngFor="let item of bookmarkFiltered">
+       {{ item | json }}
+    </li>
+  </ul>  
+</ng-template>  
