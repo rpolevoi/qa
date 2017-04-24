@@ -15,6 +15,7 @@ import { DisplayComponent } from './display/display.component';
 import { QAService } from './qa.service';
 import 'hammerjs';
 import { HistoryComponent } from './history/history.component';
+import { SeriousComponent } from './serious/serious.component';
 
 
 export const firebaseConfig  = {
@@ -35,7 +36,8 @@ export const firebaseConfig  = {
     AppComponent,
     HomeComponent,
     DisplayComponent,
-    HistoryComponent
+    HistoryComponent,
+    SeriousComponent
   ],
   imports: [
     BrowserModule,

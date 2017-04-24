@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
 import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { AngularFire, FirebaseListObservable } from 'angularfire2';
+import { AngularFire, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/first';
@@ -45,8 +45,13 @@ export class QAService implements Resolve<QA>{
   
     resolve(route: ActivatedRouteSnapshot):Observable<QA> {
         this.current = +route.params['id'];
-        return this.http.get('https://qaproject-c3e87.firebaseio.com/qa/' + this.current + '.json')
-               .map(response => response.json());
+
+        return this.af.database.object('qa/' + this.current)
+                .first()
+                .do(console.log);
+
+               
+               
         
     }
 
@@ -71,9 +76,15 @@ export class QAService implements Resolve<QA>{
 
     private getQALength() {
 
-            this.http.get('https://qaproject-c3e87.firebaseio.com/length.json')
-               .map(response => response.json())
-               .subscribe(num => this.length = num);
+           // this.http.get('https://qaproject-c3e87.firebaseio.com/length.json')
+              // .map(response => response.json())
+              
+              this.af.database.object('/length')
+                .first()
+                .do(x => console.log("length", x))
+                .map(obj => obj['$value'])
+                .do(console.log)
+                .subscribe(num => this.length = num);
     
     }
   
