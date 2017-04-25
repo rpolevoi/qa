@@ -2,20 +2,35 @@
 
 <button (click)="bookmarkFilter = !bookmarkFilter">{{!bookmarkFilter ? 'Bookmarked Only' : 'Show All'}}</button>
 
-<div *ngIf="!bookmarkFilter else elseBlock">
-  <ul>
-    <li *ngFor="let item of fullHistory">
+ <md-nav-list *ngIf="!bookmarkFilter else elseBlock">
+
+
+    <md-list-item *ngFor="let item of fullHistory">
+        
      <a md-line routerLink="/display/{{item.index}}">
-     <span md-line>{{ item | json }}</span>    
-     </a>
-    </li>
-  </ul>
-</div>
+     <span md-line>{{ item.tag.q }}</span> 
+      <span md-line *ngIf="!item.qOnly else elseBlock2">{{ item.tag.a }}</span> 
+      <ng-template #elseBlock2 ><span md-line>Answer Not Viewed</span>  </ng-template>
+      </a>
+      
+     </md-list-item>
+
+ </md-nav-list >
 
 <ng-template #elseBlock >
-  <ul>
-    <li *ngFor="let item of bookmarkFiltered">
-       {{ item | json }}
-    </li>
-  </ul>  
+ <md-nav-list > 
+    
+    <md-list-item *ngFor="let item of bookmarkFiltered">
+        
+        <a md-line routerLink="/display/{{item.index}}">
+        <span md-line>{{ item.tag.q }}</span>    
+      <span md-line *ngIf="!item.qOnly else elseBlock3">{{ item.tag.a }}</span> 
+      <ng-template #elseBlock3 ><span md-line>Answer Not Viewed</span>  </ng-template>
+         </a>
+     </md-list-item>
+ 
+  
+</md-nav-list >  
 </ng-template>  
+
+ 

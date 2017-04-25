@@ -4,8 +4,16 @@ export interface QA {
     tag:string
 }
 
+interface Tag {
+    q:string;
+    a?:string
+}
+
 export interface ViewedQA {
-    tag:string;
+    tag:Tag;
     index:number;
-    bookmark:boolean
-}    
+    bookmark:boolean;
+    qOnly:boolean;
+    $key?:string
+} 
+

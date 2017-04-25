@@ -13,26 +13,28 @@ import 'rxjs/add/operator/first';
 })
 export class HistoryComponent implements OnInit {
 
-  //filteredList$: Observable<ViewedQA[]>
-  //viewedList$: FirebaseListObservable<ViewedQA>;
+
   fullHistory: ViewedQA[];
   bookmarkFiltered: ViewedQA[];
   bookmarkFilter = false;
 
   constructor(private qaServ: QAService) {
-    //this.viewedList$ = this.qaServ.viewedQAList$
 
     
   }
 
   ngOnInit() {
-    
-    this.qaServ.viewedQAList$
-      .first()
-      .subscribe(list => {
-          this.fullHistory = list;
-          this.bookmarkFiltered = this.fullHistory.filter(el => el.bookmark == true);
-      });
-  }
+    this.getCurrentList();
 
+  }
+  
+  getCurrentList() {
+    
+      this.fullHistory = this.qaServ.viewedQAList.slice(0);
+      this.fullHistory.reverse();
+      this.bookmarkFiltered = this.fullHistory.filter(el => el.bookmark == true);
+
+  }
+  
+  
 }

@@ -1,15 +1,47 @@
-<button (click)="toggleBookmark()">BOOKMARK THIS</button>
-<h1>Bookmarked: {{bookmark}}</h1>
 
-<div>
-{{ qa.q }}<br>
-<button *ngIf="!showAFlag" (click)="showAnswer()">SHOW ANSWER</button>
-<button *ngIf="!showAFlag" (click)="newQA()">Different Question?</button>
-</div>
+<md-card>
+  <md-card-content>
 
-
-<div *ngIf="showAFlag">
-{{ qa.a }}<br>
-<button (click)="newQA()">New QA?</button>
-</div>
+    <section class="example-section">
+      <md-checkbox
+          class="example-margin"
+          [(ngModel)] ="bookmark">
+        Bookmark this Question
+      </md-checkbox>
+    </section>
     
+  </md-card-content>
+</md-card>
+
+
+
+<md-card>
+  <md-card-header>
+    <md-card-title>Question</md-card-title>
+  </md-card-header>
+  <md-card-content>
+    <p>
+      {{ qa.q }}
+    </p>
+  </md-card-content>
+  <md-card-actions>
+    <button md-button *ngIf="!showAFlag" (click)="showAnswer()">SHOW ANSWER</button>
+    <button md-button *ngIf="!showAFlag" (click)="rejectQuestion()">Different Question?</button>
+  </md-card-actions>
+</md-card>
+
+
+
+<md-card *ngIf="showAFlag">
+  <md-card-header>
+    <md-card-title>Answer</md-card-title>
+  </md-card-header>
+  <md-card-content>
+    <p>
+      {{ qa.a }}
+    </p>
+  </md-card-content>
+  <md-card-actions>
+    <button  md-button (click)="newQA()">New QA?</button>
+  </md-card-actions>
+</md-card>

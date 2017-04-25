@@ -15,30 +15,41 @@ export class QAService implements Resolve<QA>{
     current:number;
     viewed:number[] = [];
     viewedQAList$: FirebaseListObservable<any>;
+    viewedQAList:ViewedQA[] = [];
 
     constructor(private http: Http, private router: Router, public af: AngularFire) {
         
         this.getQALength();
         
         //connect to viewed history -- will subscribe in history component template
-        this.viewedQAList$ = af.database.list('/users/rob/viewed');
+        this.viewedQAList$ = af.database.list('/users/rob/viewed', { query: { orderByKey: true }});
         
-        // push  view history into viewed[] array at start
+        // set up subscription to user's viewed list, 
         this.viewedQAList$
-                .first()
+                //.first()
                 .subscribe(
                     
                     list => {
+                        console.log(list);
                         
-                        if(!list) {this.viewed = []; }
+                        
+                        if(!list) {
+                            this.viewed = []; 
+                            this.viewedQAList = [];    
+                        }
                         
                         else {
+                            console.log(list);
                             for (let i=0; i<list.length; i++ ) {
-                                this.viewed.push(list[i]['index']);
-                                console.log(list[i]['index']);
+                                if (this.viewed.indexOf(list[i]['index']) == -1){
+                                    this.viewed.push(list[i]['index']);
+                                    console.log(list[i]['index']);
+                                    //console.log(list[i]['$key']);
                                 }
+                            }
                         }
                         console.log(this.viewed);
+                        this.viewedQAList = list;
                     }
                 );
     }
@@ -47,9 +58,12 @@ export class QAService implements Resolve<QA>{
         this.current = +route.params['id'];
 
         return this.af.database.object('qa/' + this.current)
-                .first()
-                .do(console.log);
+                .first();
 
+                
+        //probably no advantage over:
+         //return this.http.get('https://qaproject-c3e87.firebaseio.com/qa/' + this.current + '.json')
+               //.map(response => response.json());
                
                
         
@@ -63,12 +77,6 @@ export class QAService implements Resolve<QA>{
           if (this.viewed.indexOf(this.current) == -1) break;
           this.randomCurrent();
         }
-        
-        this.viewed.push(this.current);
-        console.log(this.current);
-        console.log(this.viewed);
-        
-
 
         this.router.navigate(['display', this.current]);
 
@@ -96,6 +104,7 @@ export class QAService implements Resolve<QA>{
 
 
     postViewedObject(obj:ViewedQA){
+        
      const items = this.af.database.list('/users/rob/viewed');
         items.push(obj);
     }
