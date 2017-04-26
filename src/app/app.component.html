@@ -35,6 +35,12 @@
 
   </md-sidenav>
   
+ <button md-raised-button  *ngIf="!flag" (click)="login()">Login with Google</button>
+<button md-raised-button  *ngIf="flag" (click)="logout()">Logout</button>
+{{flag}}
+
+
+  
       <router-outlet ></router-outlet>
      
 </md-sidenav-container>

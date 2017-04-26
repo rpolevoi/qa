@@ -13,6 +13,7 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { DisplayComponent } from './display/display.component';
 import { QAService } from './qa.service';
+import { UserService } from './user.service';
 import 'hammerjs';
 import { HistoryComponent } from './history/history.component';
 import { SeriousComponent } from './serious/serious.component';
@@ -46,9 +47,12 @@ export const firebaseConfig  = {
     HttpModule,
     MaterialModule,
     RouterModule.forRoot(routes, { useHash: false }),
-    AngularFireModule.initializeApp(firebaseConfig)
+        AngularFireModule.initializeApp(firebaseConfig,{
+      provider: AuthProviders.Google,
+      method: AuthMethods.Popup
+    })
   ],
-  providers: [QAService],
+  providers: [QAService, UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
