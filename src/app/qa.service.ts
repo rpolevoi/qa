@@ -25,11 +25,14 @@ export class QAService implements Resolve<QA>{
                 public af: AngularFire,
                 public userServ: UserService) {
                     
+       // this.viewedQAList$ = af.database.list('/users/' + uid + '/viewed', { query: { orderByKey: true }})
+                    
         this.getQALength();                
                     
         this.userServ.user$
           .map(user => user.uid)
           .do(uid => this.userID = uid)
+          .do(uid => this.viewedQAList$ = af.database.list('/users/' + uid + '/viewed', { query: { orderByKey: true }}))
           .switchMap(uid =>  af.database.list('/users/' + uid + '/viewed', { query: { orderByKey: true }}) )
           .do(list => console.log("list here", list))    
           .subscribe(
@@ -49,7 +52,6 @@ export class QAService implements Resolve<QA>{
                                 if (this.viewed.indexOf(list[i]['index']) == -1){
                                     this.viewed.push(list[i]['index']);
                                     console.log(list[i]['index']);
-                                    //console.log(list[i]['$key']);
                                 }
                             }
                         }
@@ -57,10 +59,6 @@ export class QAService implements Resolve<QA>{
                         this.viewedQAList = list;
                     }
                 );
-                
-
-        
-        
     }
   
     resolve(route: ActivatedRouteSnapshot):Observable<QA> {
@@ -85,9 +83,6 @@ export class QAService implements Resolve<QA>{
 
     private getQALength() {
 
-           // this.http.get('https://qaproject-c3e87.firebaseio.com/length.json')
-              // .map(response => response.json())
-              
               this.af.database.object('/length')
                 .first()
                 .do(x => console.log("length", x))
