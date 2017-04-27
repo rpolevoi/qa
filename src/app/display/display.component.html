@@ -29,6 +29,6 @@
 
 <md-card>
   <md-card-actions>
-    <button  md-button (click)="newQA()">New QA?</button>
+    <button  md-button *ngIf="showAFlag" (click)="newQA()">New QA?</button>
   </md-card-actions>
 </md-card>

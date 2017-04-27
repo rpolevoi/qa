@@ -29,37 +29,45 @@ export class QAService implements Resolve<QA>{
                     
         this.getQALength();                
                     
-        this.userServ.user$
-          .map(user => user.uid)
-          .do(uid => this.userID = uid)
-          .do(uid => this.viewedQAList$ = af.database.list('/users/' + uid + '/viewed', { query: { orderByKey: true }}))
-          .switchMap(uid =>  af.database.list('/users/' + uid + '/viewed', { query: { orderByKey: true }}) )
-          .do(list => console.log("list here", list))    
-          .subscribe(
+        this.userServ.user$.subscribe(user => {
+            
+                if(!user) { this.userID = null }
+                
+                else { Observable.of(user.uid)
+                        .do(uid => this.userID = uid)
+                        .do(uid => this.viewedQAList$ = af.database.list('/users/' + uid + '/viewed', { query: { orderByKey: true }}))
+                        .switchMap(uid =>  af.database.list('/users/' + uid + '/viewed', { query: { orderByKey: true }}) )
+                        .do(list => console.log("list here", list))
+                        .subscribe(
                     
-                    list => {
-                        console.log(list);
-                        
-                        
-                        if(!list) {
-                            this.viewed = []; 
-                            this.viewedQAList = [];    
-                        }
-                        
-                        else {
+                            list => {
                             console.log(list);
-                            for (let i=0; i<list.length; i++ ) {
-                                if (this.viewed.indexOf(list[i]['index']) == -1){
-                                    this.viewed.push(list[i]['index']);
-                                    console.log(list[i]['index']);
-                                }
+                            
+                            
+                            if(!list) {
+                                this.viewed = []; 
+                                this.viewedQAList = [];    
                             }
-                        }
-                        console.log(this.viewed);
-                        this.viewedQAList = list;
-                    }
-                );
-    }
+                        
+                            else {
+                                console.log(list);
+                                for (let i=0; i<list.length; i++ ) {
+                                    if (this.viewed.indexOf(list[i]['index']) == -1)
+                                    {
+                                        this.viewed.push(list[i]['index']);
+                                        console.log(list[i]['index']);
+                                    }
+                                }//end of for
+                            }// end of else
+                            console.log(this.viewed);
+                            this.viewedQAList = list;
+                            }//end of list => {
+                        );//end of inner subscribe
+                    }//end of else { Observable.of(user.uid)
+                
+            });//end of outer subscribe
+ 
+    }//end of constructor
   
     resolve(route: ActivatedRouteSnapshot):Observable<QA> {
         this.current = +route.params['id'];
