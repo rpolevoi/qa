@@ -13,17 +13,9 @@
   </md-card-content>
 </md-card>
 
+<question-display [question]="qa.q" ></question-display>
 
-
-<md-card>
-  <md-card-header>
-    <md-card-title>Question</md-card-title>
-  </md-card-header>
-  <md-card-content>
-    <p>
-      {{ qa.q }}
-    </p>
-  </md-card-content>
+<md-card>  
   <md-card-actions>
     <button md-button *ngIf="!showAFlag" (click)="showAnswer()">SHOW ANSWER</button>
     <button md-button *ngIf="!showAFlag" (click)="rejectQuestion()">Different Question?</button>
@@ -32,15 +24,10 @@
 
 
 
-<md-card *ngIf="showAFlag">
-  <md-card-header>
-    <md-card-title>Answer</md-card-title>
-  </md-card-header>
-  <md-card-content>
-    <p>
-      {{ qa.a }}
-    </p>
-  </md-card-content>
+<answer-display *ngIf="showAFlag" [answer]="qa.a" ></answer-display>
+
+
+<md-card>
   <md-card-actions>
     <button  md-button (click)="newQA()">New QA?</button>
   </md-card-actions>
