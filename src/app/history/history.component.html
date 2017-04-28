@@ -1,5 +1,8 @@
 <h2>history</h2>
 
+
+<div *ngIf="fullHistory.length != 0 else elseBlock4" >
+
 <button (click)="bookmarkFilter = !bookmarkFilter">{{!bookmarkFilter ? 'Bookmarked Only' : 'Show All'}}</button>
 
  <md-nav-list *ngIf="!bookmarkFilter else elseBlock">
@@ -31,6 +34,8 @@
  
   
 </md-nav-list >  
-</ng-template>  
+</ng-template> 
 
- 
+</div>
+
+ <ng-template #elseBlock4 ><span md-line>Must Be Logged-In User to Have History</span>  </ng-template> 

@@ -31,7 +31,12 @@ export class QAService implements Resolve<QA>{
                     
         this.userServ.user$.subscribe(user => {
             
-                if(!user) { this.userID = null }
+                if(!user) { this.userID = null;
+                            this.viewedQAList = [];
+                            this.viewedQAList$ = null;
+                            
+                    
+                }
                 
                 else { Observable.of(user.uid)
                         .do(uid => this.userID = uid)
