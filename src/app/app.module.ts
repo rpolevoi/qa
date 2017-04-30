@@ -19,6 +19,7 @@ import { HistoryComponent } from './history/history.component';
 import { SeriousComponent } from './serious/serious.component';
 import { QuestionDisplayComponent } from './question-display/question-display.component';
 import { AnswerDisplayComponent } from './answer-display/answer-display.component';
+import { ColorGridComponent } from './color-grid/color-grid.component';
 
 
 export const firebaseConfig  = {
@@ -42,7 +43,8 @@ export const firebaseConfig  = {
     HistoryComponent,
     SeriousComponent,
     QuestionDisplayComponent,
-    AnswerDisplayComponent
+    AnswerDisplayComponent,
+    ColorGridComponent
   ],
   imports: [
     BrowserModule,

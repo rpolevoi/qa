@@ -1,0 +1,12 @@
+/*md-card-content { 
+    font-size: 12px;
+}*/
+
+:host /deep/ md-card-content {
+
+  font-family: Garamond;
+  font-size: 23px;
+  background-color: #F7F4F3;
+  color: #070426;
+}
+

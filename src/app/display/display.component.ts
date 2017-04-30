@@ -13,6 +13,7 @@ export class DisplayComponent {
   
   qa:QA;
   showAFlag = false;
+  showAPlusFlag = false;
   bookmark = false;
 
   constructor(private route: ActivatedRoute, private qaServ: QAService) { 

@@ -1,7 +1,6 @@
 
 <md-card>
   <md-card-content>
-
     <section class="example-section">
       <md-checkbox
           class="example-margin"
@@ -9,26 +8,24 @@
         Bookmark this Question
       </md-checkbox>
     </section>
-    
   </md-card-content>
 </md-card>
 
+<md-card>
 <question-display [question]="qa.q" ></question-display>
 
-<md-card>  
-  <md-card-actions>
-    <button md-button *ngIf="!showAFlag" (click)="showAnswer()">SHOW ANSWER</button>
-    <button md-button *ngIf="!showAFlag" (click)="rejectQuestion()">Different Question?</button>
+  <md-card-actions *ngIf="!showAFlag">
+    <button md-button  (click)="showAnswer()">SHOW ANSWER</button>
+    <button md-button  (click)="rejectQuestion()">Different Question?</button>
   </md-card-actions>
 </md-card>
-
-
-
-<answer-display *ngIf="showAFlag" [answer]="qa.a" ></answer-display>
 
 
 <md-card>
-  <md-card-actions>
-    <button  md-button *ngIf="showAFlag" (click)="newQA()">New QA?</button>
+<color-grid *ngIf="showAFlag && !showAPlusFlag" (flip)="showAPlusFlag = true" ></color-grid>
+<answer-display *ngIf="showAPlusFlag" [answer]="qa.a" ></answer-display>
+  <md-card-actions *ngIf="showAPlusFlag">
+    <button  md-button (click)="newQA()">New QA?</button>
   </md-card-actions>
 </md-card>
+
