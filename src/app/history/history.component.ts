@@ -44,7 +44,7 @@ export class HistoryComponent implements OnInit {
   }
   
   applyFilter(filt:string) {
-    console.log(filt);
+    //console.log(filt);
     
     switch (filt) 
     {

@@ -16,6 +16,8 @@ export class QAService implements Resolve<QA>{
     length:number;
     current:number;
     viewed:number[] = [];
+    //Reference to Observable needed for update call in DisplayComponent
+    //all other uses of current list through the array assigned in subscription
     viewedQAList$: FirebaseListObservable<any>;
     viewedQAList:ViewedQA[] = [];
     userID:string;
