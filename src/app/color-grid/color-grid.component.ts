@@ -37,7 +37,7 @@ export class ColorGridComponent implements OnInit {
     
     this.timer = Observable
                     .interval(100)
-                    .take(20);
+                    .take(15);
                     
     this.timer.subscribe(
       int => { 
@@ -49,7 +49,7 @@ export class ColorGridComponent implements OnInit {
                 {text: '', cols: 1, rows: 1, color: this.colors[2]},
                 {text: '', cols: 1, rows: 1, color: this.colors[3]},
                 ];
-                if (int == 19) { this.flip.emit(null); }
+                if (int == 14) { this.flip.emit(null); }
                } 
             );               
     

@@ -14,26 +14,57 @@ import 'rxjs/add/operator/first';
 export class HistoryComponent implements OnInit {
 
 
+  selectedFilter = 'View All';
+
+  filters = [
+    'View All',
+    'Bookmarked Only',
+    'Answer Not Viewed'
+  ];
+
   fullHistory: ViewedQA[];
-  bookmarkFiltered: ViewedQA[];
-  bookmarkFilter = false;
+  filtered: ViewedQA[];
 
-  constructor(private qaServ: QAService) {
 
-    
+  constructor(private qaServ: QAService) { 
   }
 
   ngOnInit() {
+    
     this.getCurrentList();
-
+    this.applyFilter('View All');
+    
   }
   
   getCurrentList() {
     
       this.fullHistory = this.qaServ.viewedQAList.slice(0);
       this.fullHistory.reverse();
-      this.bookmarkFiltered = this.fullHistory.filter(el => el.bookmark == true);
 
+  }
+  
+  applyFilter(filt:string) {
+    console.log(filt);
+    
+    switch (filt) 
+    {
+      case 'View All':
+        this.filtered = this.fullHistory;
+        break;
+        
+      case 'Bookmarked Only':
+        this.filtered = this.fullHistory.filter(el => el.bookmark == true);
+        break; 
+        
+      case 'Answer Not Viewed':
+        this.filtered = this.fullHistory.filter(el => el.qOnly == true);
+        break; 
+        
+      default:
+        console.log('defaulted -- somthing wrong');
+    
+    }
+    
   }
   
   

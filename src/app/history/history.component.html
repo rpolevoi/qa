@@ -1,41 +1,29 @@
 <h2>history</h2>
 
+<md-radio-group class="example-radio-group" [value] = "'View All'"(change)="applyFilter($event.value)">
+  <md-radio-button class="example-radio-button" *ngFor="let filter of filters" [value]="filter">
+    {{filter}}
+  </md-radio-button>
+</md-radio-group>
 
-<div *ngIf="fullHistory.length != 0 else elseBlock4" >
-
-<button (click)="bookmarkFilter = !bookmarkFilter">{{!bookmarkFilter ? 'Bookmarked Only' : 'Show All'}}</button>
-
- <md-nav-list *ngIf="!bookmarkFilter else elseBlock">
 
 
-    <md-list-item *ngFor="let item of fullHistory">
-        
-     <a md-line routerLink="/display/{{item.index}}">
+<div *ngIf="fullHistory?.length != 0 else elseBlock" >
+
+ <md-nav-list>
+
+
+    <a md-list-item *ngFor="let item of filtered" routerLink="/display/{{item.index}}">
+      <md-icon md-list-icon *ngIf="item.bookmark">check</md-icon>
      <span md-line>{{ item.tag.q }}</span> 
       <span md-line *ngIf="!item.qOnly else elseBlock2">{{ item.tag.a }}</span> 
       <ng-template #elseBlock2 ><span md-line>Answer Not Viewed</span>  </ng-template>
       </a>
       
-     </md-list-item>
+
 
  </md-nav-list >
 
-<ng-template #elseBlock >
- <md-nav-list > 
-    
-    <md-list-item *ngFor="let item of bookmarkFiltered">
-        
-        <a md-line routerLink="/display/{{item.index}}">
-        <span md-line>{{ item.tag.q }}</span>    
-      <span md-line *ngIf="!item.qOnly else elseBlock3">{{ item.tag.a }}</span> 
-      <ng-template #elseBlock3 ><span md-line>Answer Not Viewed</span>  </ng-template>
-         </a>
-     </md-list-item>
- 
-  
-</md-nav-list >  
-</ng-template> 
-
 </div>
 
- <ng-template #elseBlock4 ><span md-line>Must Be Logged-In User to Have History</span>  </ng-template> 
+ <ng-template #elseBlock ><span md-line>Must Be Logged-In User to Have History</span>  </ng-template> 

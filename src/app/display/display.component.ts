@@ -37,6 +37,8 @@ export class DisplayComponent {
 
   
   newQA() {
+    this.showAFlag = false;
+    this.showAPlusFlag = false;
     this.bookmark = false;
     this.qaServ.newQA();
   }
@@ -51,6 +53,8 @@ export class DisplayComponent {
 
     this.saveOrUpdate(true);
     console.log('xxx');
+    this.showAFlag = false;
+    this.showAPlusFlag = false;
     this.bookmark = false;
     this.qaServ.newQA();
   }
