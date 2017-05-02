@@ -6,6 +6,9 @@
         <md-icon>menu</md-icon>
         </button>
         <span>noatol.io</span>
+        <span class="example-fill-remaining-space"></span>
+     <button md-anchor class="secondary" *ngIf="!flag" (click)="login()">Login with Google</button>
+     <button md-anchor class="secondary" *ngIf="flag" (click)="logout()">Logout</button>
     </md-toolbar>
 
 <md-sidenav #sidenav mode="side" opened="false">
@@ -20,7 +23,8 @@
    
     <md-list-item>
      <a md-line routerLink="history">
-     <span md-line>HISTORY</span>    
+     <span md-line>HISTORY</span>
+     <span md-line *ngIf="!flag">(logged in only)</span>
      </a>
    </md-list-item>
    
@@ -30,14 +34,16 @@
      </a>
    </md-list-item>
    
+   <md-list-item>
+     <span md-line (click)="qaServ.newQA()">NEW QUESTION?</span>    
+   </md-list-item>
+   
   </md-nav-list>
 
 
   </md-sidenav>
   
- <button md-raised-button  *ngIf="!flag" (click)="login()">Login with Google</button>
-<button md-raised-button  *ngIf="flag" (click)="logout()">Logout</button>
-{{flag}}
+
 
 
   

@@ -1,0 +1,15 @@
+md-sidenav {
+  width: 150px;
+}
+
+.example-fill-remaining-space {
+    flex: 1 1 auto;
+}
+
+.secondary {
+     color: rgba(0, 0, 233, 0.54);
+}
+
+button md-anchor {
+    color: blue;
+}

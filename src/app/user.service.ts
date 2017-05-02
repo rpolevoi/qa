@@ -6,18 +6,15 @@ import { Observable } from 'rxjs/Observable';
 export class UserService {
     
     user$:Observable<any>;
-    //user = {};
-   // flag = false;
+    isLoggedIn = false;
+
     
       constructor(public af: AngularFire) {
           this.user$ = this.af.auth;
           
-/*          this.user$
-            .subscribe(user => {
-              this.user = user;
-              user ? this.flag = true : this.flag = false;
-              console.log("serv", this.flag);   
-            });*/
+             this.user$.subscribe(user =>
+                user ? this.isLoggedIn = true : this.isLoggedIn = false
+            );
       }
   
   

@@ -4,6 +4,7 @@ import { DisplayComponent } from './display/display.component';
 import { HistoryComponent } from './history/history.component';
 import { SeriousComponent } from './serious/serious.component';
 import { QAService } from './qa.service';
+import { AuthGuard } from './auth-guard.service';
 
 export const routes: Routes = [
   {
@@ -24,6 +25,7 @@ export const routes: Routes = [
   {
     path: 'history',
     component: HistoryComponent,
+    canActivate: [AuthGuard]
   },
  
   {

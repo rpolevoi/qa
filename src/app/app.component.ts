@@ -4,6 +4,7 @@ import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 //import { AngularFire, AuthProviders } from 'angularfire2';
 import { UserService } from './user.service';
+import { QAService } from './qa.service';
 
 @Component({
   selector: 'root',
@@ -20,7 +21,7 @@ export class AppComponent implements OnDestroy, OnInit {
     private ngUnsubscribe: Subject<void> = new Subject<void>()
     
   
-      constructor(public userServ: UserService) { 
+      constructor(public userServ: UserService, private qaServ: QAService) { 
         
        // this.user = userServ.user;
         
