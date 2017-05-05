@@ -1,63 +1,82 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute, Router} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/timer';
 import 'rxjs/add/operator/pluck';
+import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/delay';
 import { QA, ViewedQA } from '../qa';
 import { QAService } from '../qa.service';
+import { UserService } from '../user.service';
+import { AngularFire } from 'angularfire2';
+
 
 @Component({
   selector: 'display',
   templateUrl: './display.component.html',
   styleUrls: ['./display.component.css']
 })
-export class DisplayComponent {
+export class DisplayComponent implements OnInit {
   
   qa:QA;
   showAFlag = false;
   showAPlusFlag = false;
   bookmark = false;
   qOnly:boolean;
+ 
 
-  constructor(private route: ActivatedRoute, private qaServ: QAService) { 
-    route.data.pluck('qa')
-        .subscribe(obj => { this.qa = <QA>obj;
-          this.showAFlag = false;
-          
-          //if not in history
-          if (this.qaServ.viewed.indexOf(this.qaServ.current) == -1) { 
-            this.bookmark = false;
-            this.qOnly = true;  //haven't viewed answer yet
-            
-          }
+  constructor(private route: ActivatedRoute,
+              private qaServ: QAService,
+              private af: AngularFire,
+              private userServ: UserService)
+    {}
+  
+  ngOnInit() {
+    
+        this.route.data.pluck('qa')
+          .do(qa => this.qa = <QA>qa)
+          .do(qa => this.showAFlag = false)
+          //.switchMap(_ => Observable.timer(500))
+          .delay(500)
+              .subscribe(
+                 _ => {
+                 
+                 // after delay to load history  -- if Not in history, post to server
+                 if (this.qaServ.viewed.indexOf(this.qaServ.current) == -1) {
+                        this.bookmark = false;
+                        this.qOnly = true;  //haven't viewed answer yet
+                        console.log("should not be in history");
+                        this.postToServer();
+                 }
 
-          //if in history
-          else {
-            let result = this.qaServ.viewedQAList.filter(el => el.index == this.qaServ.current);
-            this.bookmark = result[0]['bookmark'];
-            this.qOnly = result[0]['qOnly'];
-          }
-          
-        } );
+                //if in history, no need to post but grap bookmark and qOnly status
+                else {
+                  let result = this.qaServ.viewedQAList.filter(el => el.index == this.qaServ.current);
+                  this.bookmark = result[0]['bookmark'];
+                  this.qOnly = result[0]['qOnly'];
+                }
+                
+              } ); 
+    
   }
 
   
   newQA() {
     this.showAFlag = false;
     this.showAPlusFlag = false;
-    //this.bookmark = false;
     this.qaServ.newQA();
   }
   
   showAnswer(){
     this.showAFlag = true;
     this.qOnly = false;
-    this.saveOrUpdate();
-
-       
+    if (this.userServ.isLoggedIn)
+      { this.updateServer();}
   }
   
   rejectQuestion() {
-
-    this.saveOrUpdate();
+    if (this.userServ.isLoggedIn)
+      { this.updateServer();}
     this.showAFlag = false;
     this.showAPlusFlag = false;
     this.qaServ.newQA();
@@ -66,23 +85,15 @@ export class DisplayComponent {
   setBookmark(checked:boolean) {
   
     this.bookmark = checked;
-    this.saveOrUpdate();
+    if (this.userServ.isLoggedIn)
+      { this.updateServer();}
     
   }   
   
-  
-  saveOrUpdate() {
-  
-      //save only if not in viewed list yet
-      if (this.qaServ.viewed.indexOf(this.qaServ.current) == -1)
-          { this.postToServer(); }
-      
-      else { this.updateServer() }
-    
-  }
-      
-
-  postToServer()  {  
+  postToServer()  { 
+      if (this.userServ.isLoggedIn)
+      {
+        console.log("post to server");
        let q = this.qa.tag['q'];
        let a = this.qa.tag['a'];
        let tag = { q, a};
@@ -91,9 +102,11 @@ export class DisplayComponent {
        let qOnly = this.qOnly;
        const temp:ViewedQA = { tag, index, bookmark, qOnly };
        this.qaServ.postViewedObject(temp);
+      }
   }
   
   updateServer() {
+      console.log("update to server");
      let result = this.qaServ.viewedQAList.filter(el => el.index == this.qaServ.current);
      let key = result[0]['$key'];
      let bookmark = this.bookmark;

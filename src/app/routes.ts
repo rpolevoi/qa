@@ -5,6 +5,8 @@ import { HistoryComponent } from './history/history.component';
 import { SeriousComponent } from './serious/serious.component';
 import { QAService } from './qa.service';
 import { AuthGuard } from './auth-guard.service';
+import { ResolverService } from './resolver.service';
+
 
 export const routes: Routes = [
   {
@@ -18,8 +20,8 @@ export const routes: Routes = [
   {
     path: 'display/:id',
     component: DisplayComponent,
-        resolve: {
-      qa: QAService
+       resolve: {
+      qa: ResolverService
     }
   },
   {

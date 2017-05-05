@@ -15,7 +15,10 @@ import { DisplayComponent } from './display/display.component';
 import { QAService } from './qa.service';
 import { UserService } from './user.service';
 import { AuthGuard } from './auth-guard.service';
+import { ResolverService } from './resolver.service';
+
 import 'hammerjs';
+
 import { HistoryComponent } from './history/history.component';
 import { SeriousComponent } from './serious/serious.component';
 import { QuestionDisplayComponent } from './question-display/question-display.component';
@@ -59,7 +62,7 @@ export const firebaseConfig  = {
       method: AuthMethods.Popup
     })
   ],
-  providers: [QAService, UserService, AuthGuard],
+  providers: [QAService, UserService, AuthGuard, ResolverService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

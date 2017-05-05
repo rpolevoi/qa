@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
-import { Http } from '@angular/http';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { AngularFire, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2';
+import { AngularFire, FirebaseListObservable } from 'angularfire2';
 import { UserService } from './user.service';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
@@ -11,24 +10,28 @@ import 'rxjs/add/operator/first';
 import { QA, ViewedQA } from './qa';
 
 @Injectable()
-export class QAService implements Resolve<QA>{
+export class QAService {
 
     length:number;
-    current:number;
+    current:number = null;
     viewed:number[] = [];
-    //Reference to Observable needed for update call in DisplayComponent
-    //all other uses of current list through the array assigned in subscription
-    viewedQAList$: FirebaseListObservable<any>;
     viewedQAList:ViewedQA[] = [];
     userID:string;
+    //Reference to Observable needed for update call in DisplayComponent
+    //all other uses of current list through viewedQAList array 
+    viewedQAList$: FirebaseListObservable<any>;
 
-    constructor(private http: Http,
+    
+
+
+    constructor(
                 private router: Router,
                 public af: AngularFire,
-                public userServ: UserService) {
-                    
-       // this.viewedQAList$ = af.database.list('/users/' + uid + '/viewed', { query: { orderByKey: true }})
-                    
+                public userServ: UserService
+                )
+     {
+            
+        
         this.getQALength();                
                     
         this.userServ.user$.subscribe(user => {
@@ -44,55 +47,55 @@ export class QAService implements Resolve<QA>{
                         .do(uid => this.userID = uid)
                         .do(uid => this.viewedQAList$ = af.database.list('/users/' + uid + '/viewed', { query: { orderByKey: true }}))
                         .switchMap(uid =>  af.database.list('/users/' + uid + '/viewed', { query: { orderByKey: true }}) )
-                        .do(list => console.log("list here", list))
+                        //.do(list => console.log("list here", list))
                         .subscribe(
                     
                             list => {
-                            console.log(list);
                             
+                                if(!list) {
+                                    this.viewed = []; 
+                                    this.viewedQAList = [];    
+                                }
                             
-                            if(!list) {
-                                this.viewed = []; 
-                                this.viewedQAList = [];    
-                            }
-                        
-                            else {
-                                console.log(list);
-                                for (let i=0; i<list.length; i++ ) {
-                                    if (this.viewed.indexOf(list[i]['index']) == -1)
-                                    {
-                                        this.viewed.push(list[i]['index']);
-                                        console.log(list[i]['index']);
+                                else {
+                                    for (let i=0; i<list.length; i++ ) {
+                                        if (this.viewed.indexOf(list[i]['index']) == -1)
+                                        {
+                                            this.viewed.push(list[i]['index']);
+                                        }
                                     }
-                                }//end of for
-                            }// end of else
-                            console.log(this.viewed);
-                            this.viewedQAList = list;
-                            }//end of list => {
+                                }
+                                console.log(this.viewed);
+                                this.viewedQAList = list;
+                                
+                            }
                         );//end of inner subscribe
                     }//end of else { Observable.of(user.uid)
                 
             });//end of outer subscribe
- 
-    }//end of constructor
-  
-    resolve(route: ActivatedRouteSnapshot):Observable<QA> {
-        this.current = +route.params['id'];
-
-        return this.af.database.object('qa/' + this.current)
-                .first();
     }
+  
+
 
     newQA() {
-
-        this.randomCurrent();
-
-        for (;;) {
-          if (this.viewed.indexOf(this.current) == -1) break;
-          this.randomCurrent();
+        
+        if( this.viewedQAList && this.viewedQAList.length == this.length) {
+            console.log('all questions in history');
+            
         }
 
-        this.router.navigate(['display', this.current]);
+        else {
+            
+            this.randomCurrent();
+    
+            for (;;) {
+              if (this.viewed.indexOf(this.current) == -1) break;
+              this.randomCurrent();
+            }
+            
+    
+            this.router.navigate(['display', this.current]);
+        }
 
     }
 
@@ -116,7 +119,10 @@ export class QAService implements Resolve<QA>{
 
     postViewedObject(obj:ViewedQA){
         
-     const items = this.af.database.list('/users/' + this.userID + '/viewed');
-        items.push(obj);
+    if(this.userID)
+        {
+          const items = this.af.database.list('/users/' + this.userID + '/viewed');
+          items.push(obj);
+        }
     }
 }

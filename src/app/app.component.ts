@@ -18,7 +18,8 @@ export class AppComponent implements OnDestroy, OnInit {
   
     //user = {};
     flag = false;
-    private ngUnsubscribe: Subject<void> = new Subject<void>()
+    private ngUnsubscribe: Subject<void> = new Subject<void>();
+ 
     
   
       constructor(public userServ: UserService, private qaServ: QAService) { 
@@ -37,6 +38,8 @@ export class AppComponent implements OnDestroy, OnInit {
         this.userServ.user$
           .takeUntil(this.ngUnsubscribe)
           .subscribe(user => {user ? this.flag = true : this.flag = false });
+          console.log("current", this.qaServ.current);
+
   }
               
   login() {
@@ -46,6 +49,8 @@ export class AppComponent implements OnDestroy, OnInit {
   logout() {
     this.userServ.logout();
   }
+  
+ 
   
    ngOnDestroy() {
      

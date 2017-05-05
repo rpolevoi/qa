@@ -34,11 +34,26 @@
      </a>
    </md-list-item>
    
+       <md-list-item>
+     <a md-line href="mailto:?&subject=testtt&body=https://noettol.com/display/{{this.qaServ.current}}" target="_blank">
+     <span md-line>MAIL</span> 
+     <span md-line>{{this.qaServ.current}}</span>
+     </a>
+   </md-list-item>
+   
+    <md-list-item>
+     <a md-line href="https://twitter.com/home?status=https://noettol.com/display/{{this.qaServ.current}}" target="_blank">
+     <span md-line>TWEET</span> 
+     <span md-line>{{this.qaServ.current}}</span>
+     </a>
+   </md-list-item>
+   
    <md-list-item>
      <span md-line (click)="qaServ.newQA()">NEW QUESTION?</span>    
    </md-list-item>
    
   </md-nav-list>
+
 
 
   </md-sidenav>

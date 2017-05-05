@@ -13,7 +13,7 @@
 </md-card>
 
 <md-card>
-<question-display [question]="qa.q" ></question-display>
+<question-display [question]="qa?.q" ></question-display>
 
   <md-card-actions *ngIf="!showAFlag">
     <button md-button  (click)="showAnswer()">SHOW ANSWER</button>
