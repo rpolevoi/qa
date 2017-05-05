@@ -1,5 +1,5 @@
 md-sidenav {
-  width: 150px;
+  width: 100px;
 }
 
 .example-fill-remaining-space {
@@ -10,6 +10,3 @@ md-sidenav {
      color: rgba(0, 0, 233, 0.54);
 }
 
-button md-anchor {
-    color: blue;
-}

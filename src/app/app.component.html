@@ -17,7 +17,7 @@
 
     <md-list-item>
      <a md-line routerLink="home">
-     <span md-line>HOME PAGE</span>    
+     <span md-line>HOME</span>    
      </a>
    </md-list-item>
    
@@ -30,7 +30,7 @@
    
     <md-list-item>
      <a md-line routerLink="serious">
-     <span md-line>A SERIOUS NOTE</span>    
+     <span md-line>OFFICE</span>    
      </a>
    </md-list-item>
    
@@ -48,8 +48,15 @@
      </a>
    </md-list-item>
    
+    <md-list-item>
+     <a md-line href="https://plus.google.com/share?url=https%3A//noettol.com/display/{{this.qaServ.current}}" target="_blank">
+     <span md-line>GooglePlus</span> 
+     <span md-line>{{this.qaServ.current}}</span>
+     </a>
+   </md-list-item>
+   
    <md-list-item>
-     <span md-line (click)="qaServ.newQA()">NEW QUESTION?</span>    
+     <span md-line (click)="qaServ.newQA()">NEW QA?</span>    
    </md-list-item>
    
   </md-nav-list>

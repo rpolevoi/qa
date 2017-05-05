@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,  ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/timer';
@@ -23,6 +23,12 @@ export class DisplayComponent implements OnInit {
   showAPlusFlag = false;
   bookmark = false;
   qOnly:boolean;
+  
+   @ViewChild('bookmark')
+   bkmk: ElementRef;
+   
+   @ViewChild('colorbar')
+   clrbar: ElementRef;
  
 
   constructor(private route: ActivatedRoute,
@@ -65,13 +71,24 @@ export class DisplayComponent implements OnInit {
     this.showAFlag = false;
     this.showAPlusFlag = false;
     this.qaServ.newQA();
+    console.log("bk", this.bkmk);
+    console.log("bkne", this.bkmk.nativeElement);
+    this.bkmk.nativeElement.scrollIntoView();
   }
   
   showAnswer(){
+    
+            console.log("color", this.clrbar);
+    console.log("cbne", this.clrbar.nativeElement);
+    this.clrbar.nativeElement.scrollIntoView();
     this.showAFlag = true;
+
+
     this.qOnly = false;
     if (this.userServ.isLoggedIn)
       { this.updateServer();}
+      
+  
   }
   
   rejectQuestion() {
@@ -80,6 +97,9 @@ export class DisplayComponent implements OnInit {
     this.showAFlag = false;
     this.showAPlusFlag = false;
     this.qaServ.newQA();
+    console.log("bk", this.bkmk);
+    console.log("bkne", this.bkmk.nativeElement);
+    this.bkmk.nativeElement.scrollIntoView();
   }
   
   setBookmark(checked:boolean) {
@@ -115,6 +135,6 @@ export class DisplayComponent implements OnInit {
      
   }   
       
-  
+
 
 }
