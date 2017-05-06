@@ -25,13 +25,15 @@
 
 <md-card>
 
-<div #colorbar></div>
+
 <answer-display *ngIf="showAPlusFlag" [answer]="qa.a" ></answer-display>
- 
+
   <md-card-actions *ngIf="showAPlusFlag">
     <button  md-button (click)="newQA()">New QA?</button>
   </md-card-actions>
+   <div #colorbar></div>
 </md-card>
+
 
  
 

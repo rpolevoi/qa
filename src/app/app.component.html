@@ -5,7 +5,9 @@
         <button md-icon-button (click)="sidenav.toggle()">
         <md-icon>menu</md-icon>
         </button>
-        <span>noatol.io</span>
+        <span>NOETTOL</span>
+        <span class="example-fill-remaining-space"></span>
+        <h5>[ mobile knowledge ]</h5>
         <span class="example-fill-remaining-space"></span>
      <button md-anchor class="secondary" *ngIf="!flag" (click)="login()">Login with Google</button>
      <button md-anchor class="secondary" *ngIf="flag" (click)="logout()">Logout</button>
@@ -57,6 +59,10 @@
    
    <md-list-item>
      <span md-line (click)="qaServ.newQA()">NEW QA?</span>    
+   </md-list-item>
+   
+      <md-list-item>
+     <span md-line (click)="sidenav.toggle()">CLOSE</span>    
    </md-list-item>
    
   </md-nav-list>

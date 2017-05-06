@@ -80,7 +80,7 @@ export class DisplayComponent implements OnInit {
     
             console.log("color", this.clrbar);
     console.log("cbne", this.clrbar.nativeElement);
-    this.clrbar.nativeElement.scrollIntoView();
+    this.clrbar.nativeElement.scrollIntoView(true);
     this.showAFlag = true;
 
 
