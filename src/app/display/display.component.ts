@@ -24,7 +24,7 @@ export class DisplayComponent implements OnInit {
   bookmark = false;
   qOnly:boolean;
   
-   @ViewChild('bookmark')
+   @ViewChild('bkmk')
    bkmk: ElementRef;
    
    @ViewChild('colorbar')

@@ -10,3 +10,18 @@
   color: #070426;
 }
 
+
+
+.material-icons.md-48 { 
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 48px; }
+  
+.example-fill-remaining-space {
+    flex: 1 1 auto;
+}
+
+.socialbar {
+  height: 48px;
+}
+  
+

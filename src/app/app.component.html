@@ -7,9 +7,7 @@
         </button>
         <span>NOETTOL</span>
         <span class="example-fill-remaining-space"></span>
-        <h5>[ mobile knowledge ]</h5>
-        <span class="example-fill-remaining-space"></span>
-     <button md-anchor class="secondary" *ngIf="!flag" (click)="login()">Login with Google</button>
+     <button md-anchor class="secondary" *ngIf="!flag" (click)="login()">Login</button>
      <button md-anchor class="secondary" *ngIf="flag" (click)="logout()">Logout</button>
     </md-toolbar>
 
@@ -36,26 +34,6 @@
      </a>
    </md-list-item>
    
-       <md-list-item>
-     <a md-line href="mailto:?&subject=testtt&body=https://noettol.com/display/{{this.qaServ.current}}" target="_blank">
-     <span md-line>MAIL</span> 
-     <span md-line>{{this.qaServ.current}}</span>
-     </a>
-   </md-list-item>
-   
-    <md-list-item>
-     <a md-line href="https://twitter.com/home?status=https://noettol.com/display/{{this.qaServ.current}}" target="_blank">
-     <span md-line>TWEET</span> 
-     <span md-line>{{this.qaServ.current}}</span>
-     </a>
-   </md-list-item>
-   
-    <md-list-item>
-     <a md-line href="https://plus.google.com/share?url=https%3A//noettol.com/display/{{this.qaServ.current}}" target="_blank">
-     <span md-line>GooglePlus</span> 
-     <span md-line>{{this.qaServ.current}}</span>
-     </a>
-   </md-list-item>
    
    <md-list-item>
      <span md-line (click)="qaServ.newQA()">NEW QA?</span>    
