@@ -8,14 +8,22 @@ export class UserService {
   
     user$: Observable<firebase.User>;
     isLoggedIn = false;
+    userID:string;
 
     
       constructor(public afAuth: AngularFireAuth) {
           this.user$ = this.afAuth.authState;
           
-             this.user$.subscribe(user =>
-                user ? this.isLoggedIn = true : this.isLoggedIn = false
-            );
+             this.user$.subscribe(user => {
+               if(user) {
+                 this.isLoggedIn = true;
+                 this.userID = user.uid;
+               }
+               else {
+                 this.isLoggedIn = false;
+                 this.userID = null;
+               }
+             });
       }
 
   

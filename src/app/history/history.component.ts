@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ViewedQA } from '../qa';
 import { QAService } from '../qa.service';
+import { UserService } from '../user.service';
 
 
 @Component({
@@ -21,9 +22,11 @@ export class HistoryComponent implements OnInit {
 
   fullHistory: ViewedQA[];
   filtered: ViewedQA[];
+  loggedIn:boolean;
 
 
-  constructor(private qaServ: QAService) { 
+  constructor(private qaServ: QAService, private userServ: UserService) { 
+    this.loggedIn = this.userServ.isLoggedIn;
   }
 
   ngOnInit() {

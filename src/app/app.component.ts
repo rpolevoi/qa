@@ -19,7 +19,7 @@ export class AppComponent implements OnDestroy, OnInit {
     private ngUnsubscribe: Subject<void> = new Subject<void>();
  
     
-  
+  //NOTE -- QAService injected only to log out current value at this point
       constructor(public userServ: UserService, private qaServ: QAService) { 
         
         

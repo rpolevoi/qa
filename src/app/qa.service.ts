@@ -16,7 +16,7 @@ export class QAService {
     current:number = null;
     viewed:number[] = [];
     viewedQAList:ViewedQA[] = [];
-    userID:string;
+   // userID:string;
     //Reference to Observable needed for update call in DisplayComponent
     //all other uses of current list through viewedQAList array 
     viewedQAList$: FirebaseListObservable<any>;
@@ -29,50 +29,46 @@ export class QAService {
                 public db: AngularFireDatabase,
                 public userServ: UserService
                 )
-     {
+    {
             
         
-        this.getQALength();                
-                    
-        this.userServ.user$.subscribe(user => {
+      this.getQALength();                
+    
+      //need to udate access to history with each change of user status                
+      this.userServ.user$.subscribe( _ => {
             
-                if(!user) { this.userID = null;
-                            this.viewedQAList = [];
-                            this.viewedQAList$ = null;
-                            
+        if(!this.userServ.isLoggedIn) {
+            
+            this.viewedQAList = [];
+            this.viewedQAList$ = null;
                     
-                }
+        }
                 
-                else { Observable.of(user.uid)
-                        .do(uid => this.userID = uid)
-                        .do(uid => this.viewedQAList$ = db.list('/users/' + uid + '/viewed', { query: { orderByKey: true }}))
-                        .switchMap(uid =>  db.list('/users/' + uid + '/viewed', { query: { orderByKey: true }}) )
-                        .subscribe(
+        else { Observable.of(this.userServ.userID)
+                    .do(uid => this.viewedQAList$ = db.list('/users/' + uid + '/viewed', { query: { orderByKey: true }}))
+                    .switchMap(uid =>  db.list('/users/' + uid + '/viewed', { query: { orderByKey: true }}) )
+                    .subscribe(
                     
-                            list => {
+                        list => {
+                            console.log(list);
+                            if(!list) {
+                                this.viewed = []; 
+                                this.viewedQAList = [];    
+                            }
                             
-                                if(!list) {
-                                    this.viewed = []; 
-                                    this.viewedQAList = [];    
-                                }
-                            
-                                else {
-                                    for (let i=0; i<list.length; i++ ) {
-                                        if (this.viewed.indexOf(list[i]['index']) == -1)
-                                        {
-                                            this.viewed.push(list[i]['index']);
-                                        }
+                            else {
+                                for (let i=0; i<list.length; i++ ) {
+                                    if (this.viewed.indexOf(list[i]['index']) == -1)
+                                        {this.viewed.push(list[i]['index']);}
                                     }
-                                }
+                                }//end of for
                                 console.log(this.viewed);
                                 this.viewedQAList = list;
-                                
-                            }
-                        );//end of inner subscribe
-                    }//end of else { Observable.of(user.uid)
-                
-            });//end of outer subscribe
-    }
+                            }//end of inner else
+                        );//end of subscribe
+        }//end of outer else
+      });//end of outer subscribe
+    }//end of constructor
   
 
 
@@ -117,9 +113,9 @@ export class QAService {
 
     postViewedObject(obj:ViewedQA){
         
-    if(this.userID)
+    if(this.userServ.userID)
         {
-          const items = this.db.list('/users/' + this.userID + '/viewed');
+          const items = this.db.list('/users/' + this.userServ.userID + '/viewed');
           items.push(obj);
         }
     }

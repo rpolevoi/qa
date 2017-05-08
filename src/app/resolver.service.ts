@@ -15,7 +15,7 @@ export class ResolverService implements Resolve<QA>{
 
     resolve(route: ActivatedRouteSnapshot):Observable<QA> {
         this.qaServ.current = +route.params['id'];
-        console.log("resolver");
+        console.log("resolver current", this.qaServ.current );
 
         return this.db.object('qa/' + this.qaServ.current)
                 .first();
