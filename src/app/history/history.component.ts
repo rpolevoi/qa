@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFire, FirebaseListObservable } from 'angularfire2';
-import { Subject } from "rxjs";
 import { ViewedQA } from '../qa';
 import { QAService } from '../qa.service';
-import 'rxjs/add/operator/first';
 
 
 @Component({
@@ -44,8 +41,7 @@ export class HistoryComponent implements OnInit {
   }
   
   applyFilter(filt:string) {
-    //console.log(filt);
-    
+
     switch (filt) 
     {
       case 'View All':

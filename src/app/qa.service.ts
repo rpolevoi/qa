@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { AngularFire, FirebaseListObservable } from 'angularfire2';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { UserService } from './user.service';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
@@ -26,7 +26,7 @@ export class QAService {
 
     constructor(
                 private router: Router,
-                public af: AngularFire,
+                public db: AngularFireDatabase,
                 public userServ: UserService
                 )
      {
@@ -45,9 +45,8 @@ export class QAService {
                 
                 else { Observable.of(user.uid)
                         .do(uid => this.userID = uid)
-                        .do(uid => this.viewedQAList$ = af.database.list('/users/' + uid + '/viewed', { query: { orderByKey: true }}))
-                        .switchMap(uid =>  af.database.list('/users/' + uid + '/viewed', { query: { orderByKey: true }}) )
-                        //.do(list => console.log("list here", list))
+                        .do(uid => this.viewedQAList$ = db.list('/users/' + uid + '/viewed', { query: { orderByKey: true }}))
+                        .switchMap(uid =>  db.list('/users/' + uid + '/viewed', { query: { orderByKey: true }}) )
                         .subscribe(
                     
                             list => {
@@ -101,11 +100,10 @@ export class QAService {
 
     private getQALength() {
 
-              this.af.database.object('/length')
+              this.db.object('/length')
                 .first()
                 .do(x => console.log("length", x))
                 .map(obj => obj['$value'])
-                .do(console.log)
                 .subscribe(num => this.length = num);
     
     }
@@ -121,7 +119,7 @@ export class QAService {
         
     if(this.userID)
         {
-          const items = this.af.database.list('/users/' + this.userID + '/viewed');
+          const items = this.db.list('/users/' + this.userID + '/viewed');
           items.push(obj);
         }
     }

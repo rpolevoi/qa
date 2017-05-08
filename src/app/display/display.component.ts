@@ -8,7 +8,7 @@ import 'rxjs/add/operator/delay';
 import { QA, ViewedQA } from '../qa';
 import { QAService } from '../qa.service';
 import { UserService } from '../user.service';
-import { AngularFire } from 'angularfire2';
+
 
 
 @Component({
@@ -33,7 +33,6 @@ export class DisplayComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private qaServ: QAService,
-              private af: AngularFire,
               private userServ: UserService)
     {}
   
@@ -97,8 +96,6 @@ export class DisplayComponent implements OnInit {
     this.showAFlag = false;
     this.showAPlusFlag = false;
     this.qaServ.newQA();
-    console.log("bk", this.bkmk);
-    console.log("bkne", this.bkmk.nativeElement);
     this.bkmk.nativeElement.scrollIntoView();
   }
   
@@ -126,7 +123,7 @@ export class DisplayComponent implements OnInit {
   }
   
   updateServer() {
-      console.log("update to server");
+     console.log("update to server");
      let result = this.qaServ.viewedQAList.filter(el => el.index == this.qaServ.current);
      let key = result[0]['$key'];
      let bookmark = this.bookmark;

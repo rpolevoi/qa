@@ -13,10 +13,10 @@ export class ColorGridComponent implements OnInit {
 
 
   colors = [
-    '#542905',  //'#070426',
-    '#F7E6DC',//'#F7F4F3',
-    '#FF8528',//'#FDE0CB',
-    '#FF006A'//'#BA013C'
+    '#542905',
+    '#F7E6DC',
+    '#FF8528',
+    '#FF006A'
   ];
   
   tiles = [

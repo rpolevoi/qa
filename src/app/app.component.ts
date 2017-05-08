@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable } from "rxjs/Observable";
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
-//import { AngularFire, AuthProviders } from 'angularfire2';
 import { UserService } from './user.service';
 import { QAService } from './qa.service';
 
@@ -16,7 +15,6 @@ import { QAService } from './qa.service';
 export class AppComponent implements OnDestroy, OnInit {
   
   
-    //user = {};
     flag = false;
     private ngUnsubscribe: Subject<void> = new Subject<void>();
  
@@ -24,13 +22,12 @@ export class AppComponent implements OnDestroy, OnInit {
   
       constructor(public userServ: UserService, private qaServ: QAService) { 
         
-       // this.user = userServ.user;
         
       }
 
 
 //!!NOTE!! the unscription here is not needed because the life of the component coterminous with
-//that of the app.  But I stick it in to preserve the model
+//that of the app.  But I stick it in to preserve the practice for reference
 //THIS SHOULD MEAN that subscriptions in services are not needed, but need to think about this!!
 
  ngOnInit() {
