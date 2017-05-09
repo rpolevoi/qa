@@ -1,19 +1,9 @@
 <div #bkmk></div>
-<md-card >
-  <md-card-content>
-    <section  class="example-section">
-      <md-checkbox
-          class="example-margin"
-          [checked]="bookmark"
-          (change) ="setBookmark($event.checked)">
-        Bookmark this Question
-      </md-checkbox>
-    </section>
-  </md-card-content>
-</md-card>
-
 
 <div class="socialbar">
+
+ 
+  
 <a  href="https://www.facebook.com/sharer/sharer.php?u=https%3A//noetol.com/display/{{this.qaServ.current}}" target="_blank">
   <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 width="50px" height="50" viewBox="0 0 266.893 266.895" enable-background="new 0 0 266.893 266.895"
@@ -51,7 +41,21 @@
 
 </div>
 
-
+<md-card >
+  <md-card-content>
+    <section >
+      <md-checkbox
+          [disabled]="!loggedIn"
+          [checked]="bookmark"
+          (change) ="setBookmark($event.checked)">
+        <span [style.color]="loggedIn ? 'black': 'lightgrey'">
+        <span [style.font-size]="'15px'">Bookmark this Question</span>
+        <span *ngIf="!loggedIn" [style.font-size]="'12px'"> (logged in only)</span>
+        </span>
+      </md-checkbox>
+    </section>
+  </md-card-content>
+</md-card>
 
 
    

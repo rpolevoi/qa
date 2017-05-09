@@ -7,8 +7,8 @@
         </button>
         <span>NOETOL</span>
         <span class="example-fill-remaining-space"></span>
-     <button md-anchor class="secondary" *ngIf="!flag" (click)="login()">Login</button>
-     <button md-anchor class="secondary" *ngIf="flag" (click)="logout()">Logout</button>
+     <button md-anchor class="secondary" *ngIf="!loggedIn" (click)="login()">Login</button>
+     <button md-anchor class="secondary" *ngIf="loggedIn" (click)="logout()">Logout</button>
     </md-toolbar>
 
 <md-sidenav #sidenav mode="side" opened="false">
@@ -23,13 +23,13 @@
    
     <md-list-item>
      <a md-line routerLink="history">
-     <span md-line [style.color]="flag ? 'black': 'grey'">History</span>
-     <span md-line [style.color]="'gray'" [style.font-size]="'11px'" *ngIf="!flag">logged in only</span>
+     <span md-line [style.color]="loggedIn ? 'black': 'grey'">History</span>
+     <span md-line [style.color]="'gray'" [style.font-size]="'11px'" *ngIf="!loggedIn">logged in only</span>
      </a>
    </md-list-item>
    
     <md-list-item>
-     <a md-line routerLink="serious">
+     <a md-line routerLink="office">
      <span md-line>Office</span>    
      </a>
    </md-list-item>

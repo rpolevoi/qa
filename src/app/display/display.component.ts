@@ -1,6 +1,8 @@
-import { Component, OnInit,  ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/observable/timer';
 import 'rxjs/add/operator/pluck';
 import 'rxjs/add/operator/switchMap';
@@ -16,27 +18,34 @@ import { UserService } from '../user.service';
   templateUrl: './display.component.html',
   styleUrls: ['./display.component.css']
 })
-export class DisplayComponent implements OnInit {
+export class DisplayComponent implements OnInit, OnDestroy {
   
   qa:QA;
   showAFlag = false;
   showAPlusFlag = false;
   bookmark = false;
   qOnly:boolean;
+  loggedIn:boolean;
+  private ngUnsubscribe: Subject<void> = new Subject<void>();
   
-   @ViewChild('bkmk')
-   bkmk: ElementRef;
+  @ViewChild('bkmk')
+  bkmk: ElementRef;
    
-   @ViewChild('colorbar')
-   clrbar: ElementRef;
+  @ViewChild('colorbar')
+  clrbar: ElementRef;
  
 
   constructor(private route: ActivatedRoute,
               private qaServ: QAService,
               private userServ: UserService)
-    {}
+    { }
   
   ngOnInit() {
+    
+        this.userServ.user$
+          .takeUntil(this.ngUnsubscribe)
+          .subscribe(user => {user ? this.loggedIn = true : this.loggedIn = false });
+
     
         this.route.data.pluck('qa')
           .do(qa => this.qa = <QA>qa)
@@ -77,7 +86,7 @@ export class DisplayComponent implements OnInit {
   
   showAnswer(){
     
-            console.log("color", this.clrbar);
+    console.log("color", this.clrbar);
     console.log("cbne", this.clrbar.nativeElement);
     this.clrbar.nativeElement.scrollIntoView(true);
     this.showAFlag = true;
@@ -132,6 +141,10 @@ export class DisplayComponent implements OnInit {
      
   }   
       
-
+   ngOnDestroy() {
+     
+        this.ngUnsubscribe.next();
+        this.ngUnsubscribe.complete();
+    }
 
 }
