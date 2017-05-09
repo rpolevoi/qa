@@ -17,34 +17,41 @@
 
     <md-list-item>
      <a md-line routerLink="home">
-     <span md-line>HOME</span>    
+     <span md-line>Home</span>    
      </a>
    </md-list-item>
    
     <md-list-item>
      <a md-line routerLink="history">
-     <span md-line>HISTORY</span>
-     <span md-line *ngIf="!flag">(logged in only)</span>
+     <span md-line [style.color]="flag ? 'black': 'grey'">History</span>
+     <span md-line [style.color]="'gray'" [style.font-size]="'11px'" *ngIf="!flag">logged in only</span>
      </a>
    </md-list-item>
    
     <md-list-item>
      <a md-line routerLink="serious">
-     <span md-line>OFFICE</span>    
+     <span md-line>Office</span>    
      </a>
    </md-list-item>
    
    
    <md-list-item>
-     <span md-line (click)="qaServ.newQA()">NEW QA?</span>    
+     <span md-line (click)="qaServ.newQA()">New Q&A</span>    
    </md-list-item>
    
       <md-list-item>
-     <span md-line (click)="sidenav.toggle()">CLOSE</span>    
+     <span md-line (click)="sidenav.toggle()" [style.font-size]="'12px'">Close Menu</span>    
    </md-list-item>
+ 
+    <md-list-item>
+    <a md-line routerLink="office">
+     <span md-line [style.font-size]="'12px'">Why Log In?</span>    
+     </a>
+   </md-list-item>
+ 
+ 
    
   </md-nav-list>
-
 
 
   </md-sidenav>

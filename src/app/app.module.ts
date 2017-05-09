@@ -24,7 +24,7 @@ import { ResolverService } from './resolver.service';
 import 'hammerjs';
 
 import { HistoryComponent } from './history/history.component';
-import { SeriousComponent } from './serious/serious.component';
+import { OfficeComponent } from './office/office.component';
 import { QuestionDisplayComponent } from './question-display/question-display.component';
 import { AnswerDisplayComponent } from './answer-display/answer-display.component';
 import { ColorGridComponent } from './color-grid/color-grid.component';
@@ -36,7 +36,7 @@ import { ColorGridComponent } from './color-grid/color-grid.component';
     HomeComponent,
     DisplayComponent,
     HistoryComponent,
-    SeriousComponent,
+    OfficeComponent,
     QuestionDisplayComponent,
     AnswerDisplayComponent,
     ColorGridComponent
