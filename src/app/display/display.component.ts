@@ -154,9 +154,15 @@ export class DisplayComponent implements OnInit, OnDestroy {
      console.log("update to server");
      let result = this.qaServ.viewedQAList.filter(el => el.index == this.qaServ.current);
      let key = result[0]['$key'];
+     //rewriting tags is pure hack to help address problem I can't yet understand
+     //in which former tags are saved for the current QA
+     //creating a history link with the wrong text, but no actual QA index duplication
+     let q = this.qa.tag['q'];
+     let a = this.qa.tag['a'];
+     let tag = { q, a};
      let bookmark = this.bookmark;
      let qOnly = this.qOnly;
-     this.qaServ.viewedQAList$.update(key, { bookmark, qOnly });
+     this.qaServ.viewedQAList$.update(key, { tag, bookmark, qOnly });
      
   }   
       
