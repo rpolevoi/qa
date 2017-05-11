@@ -45,6 +45,7 @@ export class QAService {
         }
                 
         else { Observable.of(this.userServ.userID)
+                    
                     .do(uid => this.viewedQAList$ = db.list('/users/' + uid + '/viewed', { query: { orderByKey: true }}))
                     .switchMap(uid =>  db.list('/users/' + uid + '/viewed', { query: { orderByKey: true }}) )
                     .subscribe(

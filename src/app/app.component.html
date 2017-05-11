@@ -7,6 +7,8 @@
         </button>
         <span>NOETOL</span>
         <span class="example-fill-remaining-space"></span>
+        <span [style.font-size]="'11px'" *ngIf="loggedIn">Hello {{displayName}} </span>
+     <span class="example-fill-remaining-space"></span>
      <button md-anchor class="secondary" *ngIf="!loggedIn" (click)="login()">Login</button>
      <button md-anchor class="secondary" *ngIf="loggedIn" (click)="logout()">Logout</button>
     </md-toolbar>

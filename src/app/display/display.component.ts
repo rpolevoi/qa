@@ -43,8 +43,27 @@ export class DisplayComponent implements OnInit, OnDestroy {
   ngOnInit() {
     
         this.userServ.user$
+
           .takeUntil(this.ngUnsubscribe)
-          .subscribe(user => {user ? this.loggedIn = true : this.loggedIn = false });
+          //longer delay here than below seems to do it
+          //think this through when possible
+          .delay(1000)
+          .subscribe(user => {
+            user ? this.loggedIn = true : this.loggedIn = false;
+            console.log(this.qaServ.viewed);
+            // if user logs in while a QA is diplayed, post the QA to server
+            // if its not already in the viewed list
+            //thus bookmark will work and history will include this QA
+            if (this.loggedIn) {
+                if (this.qaServ.viewed.indexOf(this.qaServ.current) == -1) {
+                        this.bookmark = false;
+                        this.qOnly = true;  //haven't viewed answer yet
+                        console.log("should not be in history");
+                        this.postToServer();
+                }        
+           }
+            
+          });
 
     
         this.route.data.pluck('qa')

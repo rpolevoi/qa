@@ -14,7 +14,7 @@ import { QAService } from './qa.service';
 
 export class AppComponent implements OnDestroy, OnInit {
   
-  
+    displayName:string;
     loggedIn = false;
     private ngUnsubscribe: Subject<void> = new Subject<void>();
  
@@ -34,8 +34,14 @@ export class AppComponent implements OnDestroy, OnInit {
  
         this.userServ.user$
           .takeUntil(this.ngUnsubscribe)
-          .subscribe(user => {user ? this.loggedIn = true : this.loggedIn = false });
-          console.log("current", this.qaServ.current);
+          .subscribe(user => {
+            if(user){ 
+              this.loggedIn = true;
+              this.displayName = this.userServ.displayName;
+            }
+            else { this.loggedIn = false }
+          });  
+
 
   }
               
