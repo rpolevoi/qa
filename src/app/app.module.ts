@@ -18,6 +18,7 @@ import { HomeComponent } from './home/home.component';
 import { DisplayComponent } from './display/display.component';
 import { QAService } from './qa.service';
 import { UserService } from './user.service';
+import { HistoryService } from './history.service';
 import { AuthGuard } from './auth-guard.service';
 import { ResolverService } from './resolver.service';
 
@@ -52,7 +53,13 @@ import { ColorGridComponent } from './color-grid/color-grid.component';
     AngularFireDatabaseModule, // imports firebase/database, only needed for database features
     AngularFireAuthModule // imports firebase/auth, only needed for auth features
   ],
-  providers: [QAService, UserService, AuthGuard, ResolverService],
+  providers: [
+    QAService,
+    UserService,
+    HistoryService,
+    AuthGuard,
+    ResolverService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

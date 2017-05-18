@@ -9,9 +9,8 @@ import { QAService } from './qa.service';
 @Injectable()
 export class ResolverService implements Resolve<QA>{
 
-        constructor(public db: AngularFireDatabase,
-                    //public af: AngularFire,
-                    private qaServ: QAService) { }
+    constructor(public db: AngularFireDatabase, private qaServ: QAService) { }
+    
 
     resolve(route: ActivatedRouteSnapshot):Observable<QA> {
         this.qaServ.current = +route.params['id'];

@@ -1,15 +1,13 @@
 import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
-import 'rxjs/add/observable/timer';
 import 'rxjs/add/operator/pluck';
 import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/delay';
 import { QA, ViewedQA } from '../qa';
 import { QAService } from '../qa.service';
 import { UserService } from '../user.service';
+import { HistoryService } from '../history.service';
 
 
 
@@ -35,87 +33,87 @@ export class DisplayComponent implements OnInit, OnDestroy {
   clrbar: ElementRef;
  
 
-  constructor(private route: ActivatedRoute,
-              private qaServ: QAService,
-              private userServ: UserService)
-    { }
+  constructor( private route: ActivatedRoute,
+               private qaServ: QAService,
+               private userServ: UserService,
+               private historyServ: HistoryService
+              ) { }
+
   
   ngOnInit() {
     
-        this.userServ.user$
-
+    //listen for historyReady event upon user login/logout
+    //post current QA (if not in history) upon user login
+        this.historyServ.historyReady$
           .takeUntil(this.ngUnsubscribe)
-          //longer delay here than below seems to do it
-          //think this through when possible
-          .delay(1000)
-          .subscribe(user => {
-            user ? this.loggedIn = true : this.loggedIn = false;
-            console.log(this.qaServ.viewed);
+          .subscribe(ready => {
+            ready ? this.loggedIn = true : this.loggedIn = false;
+            console.log(this.historyServ.viewed);
             // if user logs in while a QA is diplayed, post the QA to server
             // if its not already in the viewed list
             //thus bookmark will work and history will include this QA
-            if (this.loggedIn) {
-                if (this.qaServ.viewed.indexOf(this.qaServ.current) == -1) {
+            if (this.loggedIn  && this.qa) {
+                if (this.historyServ.viewed.indexOf(this.qaServ.current) == -1) {
                         this.bookmark = false;
                         this.qOnly = true;  //haven't viewed answer yet
                         console.log("should not be in history");
                         this.postToServer();
-                }        
+                }
            }
             
           });
 
-    
+        
+        //subscription to data from resolver
+        //deal with history for this qa if historyReady is true 
         this.route.data.pluck('qa')
+          .do(qa => console.log("???"))
           .do(qa => this.qa = <QA>qa)
+          .do(qa => console.log("??", qa))
           .do(qa => this.showAFlag = false)
-          //.switchMap(_ => Observable.timer(500))
-          .delay(500)
-              .subscribe(
-                 _ => {
+          //if history is ready (even if empty), post or load values -- if not ready, do nothing
+          .subscribe(
+                 _ => {  if (this.historyServ.historyReady$.getValue()) {
+                        
                  
-                 // after delay to load history  -- if Not in history, post to server
-                 if (this.qaServ.viewed.indexOf(this.qaServ.current) == -1) {
+                 // if Not in history, post to server
+                 if (this.historyServ.viewed.indexOf(this.qaServ.current) == -1) {
                         this.bookmark = false;
                         this.qOnly = true;  //haven't viewed answer yet
                         console.log("should not be in history");
                         this.postToServer();
                  }
 
-                //if in history, no need to post but grap bookmark and qOnly status
+                //if in history, no need to post but grab bookmark and qOnly status
                 else {
-                  let result = this.qaServ.viewedQAList.filter(el => el.index == this.qaServ.current);
+                  let result = this.historyServ.viewedQAList.filter(el => el.index == this.qaServ.current);
                   this.bookmark = result[0]['bookmark'];
                   this.qOnly = result[0]['qOnly'];
                 }
+
+               }//end of outer if
                 
-              } ); 
+            } ); //end of subscribe
+
     
-  }
+  }// end of onInit
 
   
   newQA() {
     this.showAFlag = false;
     this.showAPlusFlag = false;
     this.qaServ.newQA();
-    console.log("bk", this.bkmk);
-    console.log("bkne", this.bkmk.nativeElement);
     this.bkmk.nativeElement.scrollIntoView();
   }
   
   showAnswer(){
     
-    console.log("color", this.clrbar);
-    console.log("cbne", this.clrbar.nativeElement);
     this.clrbar.nativeElement.scrollIntoView(true);
     this.showAFlag = true;
-
-
     this.qOnly = false;
     if (this.userServ.isLoggedIn)
       { this.updateServer();}
       
-  
   }
   
   rejectQuestion() {
@@ -133,9 +131,9 @@ export class DisplayComponent implements OnInit, OnDestroy {
     if (this.userServ.isLoggedIn)
       { this.updateServer();}
     
-  }   
+  }
   
-  postToServer()  { 
+  postToServer()  {
       if (this.userServ.isLoggedIn)
       {
         console.log("post to server");
@@ -146,13 +144,13 @@ export class DisplayComponent implements OnInit, OnDestroy {
        let bookmark = this.bookmark
        let qOnly = this.qOnly;
        const temp:ViewedQA = { tag, index, bookmark, qOnly };
-       this.qaServ.postViewedObject(temp);
+       this.historyServ.postViewedObject(temp);
       }
   }
   
   updateServer() {
      console.log("update to server");
-     let result = this.qaServ.viewedQAList.filter(el => el.index == this.qaServ.current);
+     let result = this.historyServ.viewedQAList.filter(el => el.index == this.qaServ.current);
      let key = result[0]['$key'];
      //rewriting tags is pure hack to help address problem I can't yet understand
      //in which former tags are saved for the current QA
@@ -162,9 +160,9 @@ export class DisplayComponent implements OnInit, OnDestroy {
      let tag = { q, a};
      let bookmark = this.bookmark;
      let qOnly = this.qOnly;
-     this.qaServ.viewedQAList$.update(key, { tag, bookmark, qOnly });
+     this.historyServ.viewedQAList$.update(key, { tag, bookmark, qOnly });
      
-  }   
+  }
       
    ngOnDestroy() {
      

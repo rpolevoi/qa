@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ViewedQA } from '../qa';
 import { QAService } from '../qa.service';
 import { UserService } from '../user.service';
+import { HistoryService } from '../history.service';
 
 
 @Component({
@@ -25,27 +26,30 @@ export class HistoryComponent implements OnInit {
   loggedIn:boolean;
 
 
-  constructor(private qaServ: QAService, private userServ: UserService) { 
-    this.loggedIn = this.userServ.isLoggedIn;
-  }
+  constructor(
+              private qaServ: QAService,
+              private userServ: UserService,
+              private historyServ: HistoryService
+              )
+              { this.loggedIn = this.userServ.isLoggedIn;}
+
 
   ngOnInit() {
     
-    this.getCurrentList();
-    this.applyFilter('View All');
+    this.historyServ.viewedQAList$
+                .first()
+                .subscribe(list => {
+                    this.fullHistory = list.reverse();
+                    this.applyFilter('View All');
+                 });
     
   }
   
-  getCurrentList() {
-    
-      this.fullHistory = this.qaServ.viewedQAList.slice(0);
-      this.fullHistory.reverse();
 
-  }
-  
+
   applyFilter(filt:string) {
 
-    switch (filt) 
+    switch (filt)
     {
       case 'View All':
         this.filtered = this.fullHistory;
@@ -53,18 +57,18 @@ export class HistoryComponent implements OnInit {
         
       case 'Bookmarked Only':
         this.filtered = this.fullHistory.filter(el => el.bookmark == true);
-        break; 
+        break;
         
       case 'Answer Not Viewed':
         this.filtered = this.fullHistory.filter(el => el.qOnly == true);
-        break; 
+        break;
         
       default:
         console.log('defaulted -- somthing wrong');
     
     }
-    
   }
   
+
   
 }
