@@ -71,6 +71,7 @@ export class DisplayComponent implements OnInit, OnDestroy {
           .do(qa => this.qa = <QA>qa)
           .do(qa => console.log("??", qa))
           .do(qa => this.showAFlag = false)
+          .do(qa => this.showAPlusFlag = false)
           //if history is ready (even if empty), post or load values -- if not ready, do nothing
           .subscribe(
                  _ => {  if (this.historyServ.historyReady$.getValue()) {
@@ -100,8 +101,8 @@ export class DisplayComponent implements OnInit, OnDestroy {
 
   
   newQA() {
-    this.showAFlag = false;
-    this.showAPlusFlag = false;
+    //this.showAFlag = false;
+   // this.showAPlusFlag = false;
     this.qaServ.newQA();
     this.bkmk.nativeElement.scrollIntoView();
   }
@@ -116,14 +117,14 @@ export class DisplayComponent implements OnInit, OnDestroy {
       
   }
   
-  rejectQuestion() {
+/*  rejectQuestion() {
     if (this.userServ.isLoggedIn)
       { this.updateServer();}
     this.showAFlag = false;
     this.showAPlusFlag = false;
     this.qaServ.newQA();
     this.bkmk.nativeElement.scrollIntoView();
-  }
+  }*/
   
   setBookmark(checked:boolean) {
   
