@@ -26,9 +26,11 @@ export class DisplayComponent implements OnInit, OnDestroy {
   qOnly:boolean;
   noteQ = "";
   noteA = "";
-  loggedIn:boolean;
+  loggedIn = false;
   qForm:FormGroup;
+  qControl:FormControl;
   aForm:FormGroup;
+  aControl:FormControl;
   private ngUnsubscribe: Subject<void> = new Subject<void>();
   
   @ViewChild('bkmk')
@@ -44,16 +46,22 @@ export class DisplayComponent implements OnInit, OnDestroy {
                private historyServ: HistoryService
               )
     {
-        let fb = new FormBuilder();
+        //let fb = new FormBuilder();
  
-        this.qForm = fb.group({noteQ: ['']});
-        this.aForm = fb.group({noteA: ['']}); 
+        //this.qForm = fb.group({noteQ: ['']});
+       // this.aForm = fb.group({noteA: ['']}); 
+        
+        this.qControl = new FormControl({value: '', disabled: true });
+        this.qForm= new FormGroup({ noteQ: this.qControl  });
 
         this.qForm.valueChanges
          .subscribe((value) => {
            this.noteQ = value.noteQ;
            this.updateServer();
            });
+           
+        this.aControl = new FormControl({value: '', disabled: true });
+        this.aForm= new FormGroup({ noteA: this.aControl  });   
 
         this.aForm.valueChanges
          .subscribe((value) => {
@@ -71,6 +79,14 @@ export class DisplayComponent implements OnInit, OnDestroy {
           .takeUntil(this.ngUnsubscribe)
           .subscribe(ready => {
             ready ? this.loggedIn = true : this.loggedIn = false;
+            if(this.loggedIn) {
+                this.qControl.reset({value: '', disabled: false},{emitEvent: false});
+                this.aControl.reset({value: '', disabled: false},{emitEvent: false});
+                }
+            else  {
+                this.qControl.reset({value: 'logged-in only', disabled: true},{emitEvent: false});
+                this.aControl.reset({value: 'logged-in only', disabled: true},{emitEvent: false});
+                }  
             console.log(this.historyServ.viewed);
             // if user logs in while a QA is diplayed, post the QA to server
             // if its not already in the viewed list

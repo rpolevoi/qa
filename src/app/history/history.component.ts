@@ -17,8 +17,9 @@ export class HistoryComponent implements OnInit {
 
   filters = [
     'View All',
-    'Bookmarked Only',
-    'Answer Not Viewed'
+    'Bookmarked',
+    'Answer Not Viewed',
+    'User Annotated'
   ];
 
   fullHistory: ViewedQA[];
@@ -55,13 +56,17 @@ export class HistoryComponent implements OnInit {
         this.filtered = this.fullHistory;
         break;
         
-      case 'Bookmarked Only':
+      case 'Bookmarked':
         this.filtered = this.fullHistory.filter(el => el.bookmark == true);
         break;
         
       case 'Answer Not Viewed':
         this.filtered = this.fullHistory.filter(el => el.qOnly == true);
         break;
+      
+      case 'User Annotated':
+        this.filtered = this.fullHistory.filter(el => (el.noteQ !== '') || (el.noteA !== '') );
+        break;  
         
       default:
         console.log('defaulted -- somthing wrong');
