@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import {FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/pluck';
@@ -23,7 +24,11 @@ export class DisplayComponent implements OnInit, OnDestroy {
   showAPlusFlag = false;
   bookmark = false;
   qOnly:boolean;
+  noteQ = "";
+  noteA = "";
   loggedIn:boolean;
+  qForm:FormGroup;
+  aForm:FormGroup;
   private ngUnsubscribe: Subject<void> = new Subject<void>();
   
   @ViewChild('bkmk')
@@ -37,7 +42,25 @@ export class DisplayComponent implements OnInit, OnDestroy {
                private qaServ: QAService,
                private userServ: UserService,
                private historyServ: HistoryService
-              ) { }
+              )
+    {
+        let fb = new FormBuilder();
+ 
+        this.qForm = fb.group({noteQ: ['']});
+        this.aForm = fb.group({noteA: ['']}); 
+
+        this.qForm.valueChanges
+         .subscribe((value) => {
+           this.noteQ = value.noteQ;
+           this.updateServer();
+           });
+
+        this.aForm.valueChanges
+         .subscribe((value) => {
+           this.noteA = value.noteA;
+           this.updateServer();
+           });           
+  }//end of constructor
 
   
   ngOnInit() {
@@ -59,6 +82,15 @@ export class DisplayComponent implements OnInit, OnDestroy {
                         console.log("should not be in history");
                         this.postToServer();
                 }
+                else {
+                  let result = this.historyServ.viewedQAList.filter(el => el.index == this.qaServ.current);
+                  this.bookmark = result[0]['bookmark'];
+                  this.qOnly = result[0]['qOnly'];
+                  this.noteQ = result[0]['noteQ'];
+                  this.qForm.reset({ noteQ: this.noteQ}, {emitEvent: false});
+                  this.noteA = result[0]['noteA'];
+                  this.aForm.reset({ noteA: this.noteA}, {emitEvent: false});
+                }
            }
             
           });
@@ -67,14 +99,21 @@ export class DisplayComponent implements OnInit, OnDestroy {
         //subscription to data from resolver
         //deal with history for this qa if historyReady is true 
         this.route.data.pluck('qa')
-          .do(qa => console.log("???"))
           .do(qa => this.qa = <QA>qa)
           .do(qa => console.log("??", qa))
           .do(qa => this.showAFlag = false)
           .do(qa => this.showAPlusFlag = false)
-          //if history is ready (even if empty), post or load values -- if not ready, do nothing
+          .do(qa => this.qOnly = true)
+          .do(qa => this.noteQ = "")
+          .do(qa => this.noteA = "")
           .subscribe(
-                 _ => {  if (this.historyServ.historyReady$.getValue()) {
+              _ => { 
+                //clear form with generating a form event   
+               this.qForm.reset({}, {emitEvent: false});
+               this.aForm.reset({}, {emitEvent: false});
+
+         //if history is ready (even if empty), post or load values -- if not ready, do nothing               
+               if (this.historyServ.historyReady$.getValue()) {
                         
                  
                  // if Not in history, post to server
@@ -90,6 +129,10 @@ export class DisplayComponent implements OnInit, OnDestroy {
                   let result = this.historyServ.viewedQAList.filter(el => el.index == this.qaServ.current);
                   this.bookmark = result[0]['bookmark'];
                   this.qOnly = result[0]['qOnly'];
+                  this.noteQ = result[0]['noteQ'];
+                  this.qForm.reset({ noteQ: this.noteQ}, {emitEvent: false});
+                  this.noteA = result[0]['noteA'];
+                  this.aForm.reset({ noteA: this.noteA}, {emitEvent: false});
                 }
 
                }//end of outer if
@@ -101,8 +144,6 @@ export class DisplayComponent implements OnInit, OnDestroy {
 
   
   newQA() {
-    //this.showAFlag = false;
-   // this.showAPlusFlag = false;
     this.qaServ.newQA();
     this.bkmk.nativeElement.scrollIntoView();
   }
@@ -117,14 +158,6 @@ export class DisplayComponent implements OnInit, OnDestroy {
       
   }
   
-/*  rejectQuestion() {
-    if (this.userServ.isLoggedIn)
-      { this.updateServer();}
-    this.showAFlag = false;
-    this.showAPlusFlag = false;
-    this.qaServ.newQA();
-    this.bkmk.nativeElement.scrollIntoView();
-  }*/
   
   setBookmark(checked:boolean) {
   
@@ -144,7 +177,9 @@ export class DisplayComponent implements OnInit, OnDestroy {
        let index = this.qaServ.current;
        let bookmark = this.bookmark
        let qOnly = this.qOnly;
-       const temp:ViewedQA = { tag, index, bookmark, qOnly };
+       let noteQ = this.noteQ;
+       let noteA = this.noteA;
+       const temp:ViewedQA = { tag, index, bookmark, qOnly, noteQ, noteA };
        this.historyServ.postViewedObject(temp);
       }
   }
@@ -161,7 +196,9 @@ export class DisplayComponent implements OnInit, OnDestroy {
      let tag = { q, a};
      let bookmark = this.bookmark;
      let qOnly = this.qOnly;
-     this.historyServ.viewedQAList$.update(key, { tag, bookmark, qOnly });
+     let noteQ = this.noteQ;
+     let noteA = this.noteA;
+     this.historyServ.viewedQAList$.update(key, { tag, bookmark, qOnly, noteQ, noteA });
      
   }
       

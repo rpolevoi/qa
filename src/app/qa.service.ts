@@ -20,9 +20,6 @@ export class QAService {
                 
                 { this.getQALength(); }
     
- 
-  
-
 
     newQA() {
         

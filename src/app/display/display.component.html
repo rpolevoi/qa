@@ -62,6 +62,16 @@
 <md-card>
 <question-display [question]="qa?.q" ></question-display>
 
+<form [formGroup]="qForm">
+    <md-input-container class="full-width">
+      <textarea mdInput mdTextareaAutosize
+      placeholder="Annotate Question"
+      mdAutosizeMinRows="4"
+      formControlName="noteQ">
+      </textarea>
+    </md-input-container>
+</form>
+
   <md-card-actions *ngIf="!showAFlag">
     <button md-button  (click)="showAnswer()">SHOW ANSWER</button>
     <button md-button  (click)="newQA()">NEW QA?</button>
@@ -75,9 +85,23 @@
 
 <answer-display *ngIf="showAPlusFlag" [answer]="qa.a" ></answer-display>
 
+
+
   <md-card-actions *ngIf="showAPlusFlag">
+    
+    <form [formGroup]="aForm">
+    <md-input-container class="full-width">
+      <textarea mdInput mdTextareaAutosize
+      placeholder="Annotate Answer"
+      mdAutosizeMinRows="4"
+      formControlName="noteA">
+      </textarea>
+    </md-input-container>
+    </form>
+    
     <button  md-button (click)="newQA()">New QA?</button>
   </md-card-actions>
+  
    <div #colorbar></div>
 </md-card>
 

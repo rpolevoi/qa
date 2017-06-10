@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { AngularFireDatabase, FirebaseObjectObservable } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/first';
-import { QA, ViewedQA } from './qa';
+import { QA } from './qa';
 import { QAService } from './qa.service';
 
 @Injectable()

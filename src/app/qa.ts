@@ -1,12 +1,14 @@
-export interface QA {
-    q:string;
-    a:string;
-    tag:string
-}
+
 
 interface Tag {
     q:string;
-    a?:string
+    a:string
+}
+
+export interface QA {
+    q:string;
+    a:string;
+    tag:Tag
 }
 
 export interface ViewedQA {
@@ -14,6 +16,9 @@ export interface ViewedQA {
     index:number;
     bookmark:boolean;
     qOnly:boolean;
+    noteQ?:string;
+    noteA?:string
     $key?:string
 } 
+
 

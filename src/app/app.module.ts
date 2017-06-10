@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule }    from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '@angular/material';
@@ -45,7 +45,7 @@ import { ColorGridComponent } from './color-grid/color-grid.component';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    FormsModule,
+    ReactiveFormsModule,
     HttpModule,
     MaterialModule,
     RouterModule.forRoot(routes, { useHash: false }),
