@@ -5,6 +5,7 @@ import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/pluck';
 import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/debounceTime';
 import { QA, ViewedQA } from '../qa';
 import { QAService } from '../qa.service';
 import { UserService } from '../user.service';
@@ -46,24 +47,23 @@ export class DisplayComponent implements OnInit, OnDestroy {
                private historyServ: HistoryService
               )
     {
-        //let fb = new FormBuilder();
- 
-        //this.qForm = fb.group({noteQ: ['']});
-       // this.aForm = fb.group({noteA: ['']}); 
+
         
         this.qControl = new FormControl({value: '', disabled: true });
         this.qForm= new FormGroup({ noteQ: this.qControl  });
 
         this.qForm.valueChanges
+         .debounceTime(2000)
          .subscribe((value) => {
            this.noteQ = value.noteQ;
            this.updateServer();
            });
            
-        this.aControl = new FormControl({value: '', disabled: true });
+        this.aControl = new FormControl({value: 'logged-in only', disabled: true });
         this.aForm= new FormGroup({ noteA: this.aControl  });   
 
         this.aForm.valueChanges
+         .debounceTime(2000)
          .subscribe((value) => {
            this.noteA = value.noteA;
            this.updateServer();
@@ -103,9 +103,11 @@ export class DisplayComponent implements OnInit, OnDestroy {
                   this.bookmark = result[0]['bookmark'];
                   this.qOnly = result[0]['qOnly'];
                   this.noteQ = result[0]['noteQ'];
-                  this.qForm.reset({ noteQ: this.noteQ}, {emitEvent: false});
+                  this.qControl.reset({value: this.noteQ, disabled: false},{emitEvent: false});
+                  //this.qForm.reset({ noteQ: this.noteQ}, {emitEvent: false});
                   this.noteA = result[0]['noteA'];
-                  this.aForm.reset({ noteA: this.noteA}, {emitEvent: false});
+                  this.aControl.reset({value: this.noteA, disabled: false},{emitEvent: false});
+                  //this.aForm.reset({ noteA: this.noteA}, {emitEvent: false});
                 }
            }
             
@@ -123,17 +125,17 @@ export class DisplayComponent implements OnInit, OnDestroy {
           .do(qa => this.noteQ = "")
           .do(qa => this.noteA = "")
           .subscribe(
-              _ => { 
-                //clear form with generating a form event   
-               this.qForm.reset({}, {emitEvent: false});
-               this.aForm.reset({}, {emitEvent: false});
+              _ => {
 
-         //if history is ready (even if empty), post or load values -- if not ready, do nothing               
+         //if history is ready (even if empty), post or load values -- if not ready, do nothing
+
                if (this.historyServ.historyReady$.getValue()) {
                         
                  
                  // if Not in history, post to server
                  if (this.historyServ.viewed.indexOf(this.qaServ.current) == -1) {
+                        this.qControl.reset({value: '', disabled: false},{emitEvent: false});
+                        this.aControl.reset({value: '', disabled: false},{emitEvent: false});
                         this.bookmark = false;
                         this.qOnly = true;  //haven't viewed answer yet
                         console.log("should not be in history");
@@ -150,8 +152,20 @@ export class DisplayComponent implements OnInit, OnDestroy {
                   this.noteA = result[0]['noteA'];
                   this.aForm.reset({ noteA: this.noteA}, {emitEvent: false});
                 }
-
+            
                }//end of outer if
+                
+        //if history not ready -- meaning not logged in -- disabled
+
+              else{
+
+                //clear form with generating a form event
+              // this.qForm.reset({}, {emitEvent: false});
+               //this.aForm.reset({}, {emitEvent: false});
+               this.qControl.reset({value: 'logged-in only', disabled: true},{emitEvent: false});
+               this.aControl.reset({value: 'logged-in only', disabled: true},{emitEvent: false});
+
+             }
                 
             } ); //end of subscribe
 
